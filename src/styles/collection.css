@@ -1,0 +1,124 @@
+.collection-tools {
+  display: grid;
+  gap: 8px;
+  padding: 16px 14px 10px;
+}
+
+.compact-search {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-faint);
+}
+
+.compact-search input {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0 0 0 8px;
+  border: 0;
+  background: transparent;
+}
+
+.compact-select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.collection-count {
+  padding: 3px 17px 10px;
+  color: var(--ink-faint);
+  font-size: 11px;
+}
+
+.collection-list {
+  overflow: auto;
+  padding: 0 8px 18px;
+}
+
+.collection-item {
+  display: block;
+  margin-bottom: 3px;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.collection-item:hover {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.collection-item.is-active {
+  border-color: color-mix(in srgb, var(--teal) 28%, var(--line));
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.collection-item__title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.material-status {
+  display: inline-block;
+  margin-left: 7px;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--ink-faint);
+  font-size: 9px;
+  font-weight: 600;
+  vertical-align: 1px;
+}
+
+.collection-item__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 7px;
+  color: var(--ink-faint);
+  font-size: 10px;
+}
+
+.collection-item__meta b {
+  color: var(--teal-dark);
+  font-weight: 600;
+}
+
+.collection-item--topic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+}
+
+.topic-count {
+  min-width: 24px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--ink-faint);
+  font-size: 10px;
+  text-align: center;
+}
+
+.collection-item.is-active .topic-count {
+  background: var(--teal-soft);
+  color: var(--teal-dark);
+}

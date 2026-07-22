@@ -10,36 +10,35 @@
   <body>
     <div id="app" class="app-shell">
       <aside class="app-sidebar" id="appSidebar">
-        <a class="brand" href="#/materials" aria-label="777plus 素材库">
-          <span class="brand-mark">7+</span>
+        <a class="brand" href="#/materials" aria-label="777plus 文献综述">
+          <span class="brand-symbol" aria-hidden="true"><i data-lucide="plane"></i></span>
           <span class="brand-copy"><b>777plus</b><small>飞行部逢考必过</small></span>
         </a>
         <nav class="main-nav" aria-label="主导航">
-          <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>原材料</span></a>
-          <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>重点词</span></a>
-          <a href="#/directions" data-module-link="directions"><i data-lucide="crosshair"></i><span>重点方向</span></a>
+          <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>文献综述</span></a>
+          <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>关键词</span></a>
           <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>答题模板</span></a>
         </nav>
         <div class="sidebar-footer">
           <a href="https://github.com/luckymaomi/777plus" target="_blank" rel="noreferrer" title="GitHub"><i data-lucide="github"></i><span>GitHub</span></a>
-          <span id="sourceStatus">正在载入</span>
         </div>
       </aside>
 
       <div class="app-column">
         <aside class="update-banner" aria-label="资料更新">
-          <a href="#/materials"><span>资料库已更新</span><b>12 份备考材料已整理入库</b><time datetime="2026-07-22">2026.07.22</time></a>
+          <p><strong>更新说明：</strong><span>文献综述，关键词，答题模板，更新时间7.22</span></p>
         </aside>
         <header class="app-header">
           <button class="icon-button mobile-menu" type="button" id="mobileMenu" aria-label="打开导航" title="导航"><i data-lucide="menu"></i></button>
           <div class="global-search">
             <i data-lucide="search" aria-hidden="true"></i>
-            <input id="globalSearch" type="search" placeholder="搜索材料与重点" autocomplete="off" spellcheck="false">
+            <input id="globalSearch" type="search" placeholder="搜索文献与关键词" autocomplete="off" spellcheck="false">
             <kbd>/</kbd>
             <div class="search-results" id="searchResults" hidden></div>
           </div>
           <div class="header-actions">
-            <span class="header-context" id="headerContext">原材料</span>
+            <span class="header-context" id="headerContext">文献综述</span>
+            <button class="icon-button" type="button" id="guideOpen" aria-label="打开复习指引" title="复习指引"><i data-lucide="circle-help"></i></button>
             <button class="icon-button" type="button" id="themeToggle" aria-label="切换主题" title="切换主题"><i data-lucide="moon"></i></button>
           </div>
         </header>
@@ -48,10 +47,40 @@
         </main>
       </div>
 
+      <dialog class="study-guide" id="studyGuide" aria-labelledby="studyGuideTitle">
+        <div class="study-guide__header">
+          <div>
+            <span class="eyebrow">复习指引</span>
+            <h2 id="studyGuideTitle">先读原文，再抓重点，最后组织答案</h2>
+          </div>
+          <button class="icon-button" type="button" id="guideClose" aria-label="关闭复习指引" title="关闭"><i data-lucide="x"></i></button>
+        </div>
+        <div class="study-guide__body">
+          <section class="guide-item">
+            <span class="guide-item__number">01</span>
+            <div><h3>文献综述</h3><p>先完整阅读工作报告、战略材料和安全规章，理解原文中的背景、任务与要求。</p></div>
+          </section>
+          <section class="guide-item">
+            <span class="guide-item__number">02</span>
+            <div><h3>关键词</h3><p>再按关键词查看人工整理的相关段落与上下文，需要核实时可直接回到完整原文。</p></div>
+          </section>
+          <section class="guide-item">
+            <span class="guide-item__number">03</span>
+            <div><h3>答题模板</h3><p>最后用题型结构梳理观点，把材料依据、问题分析和解决思路落到本岗位实际。</p></div>
+          </section>
+        </div>
+        <div class="study-guide__sequence" aria-label="建议复习顺序">
+          <span>通读原文</span><i data-lucide="arrow-right"></i><span>复习重点</span><i data-lucide="arrow-right"></i><span>完成作答</span>
+        </div>
+        <div class="study-guide__footer">
+          <label><input id="guideRemember" type="checkbox" checked> 不再自动显示</label>
+          <button class="guide-primary" type="button" id="guideStart">开始复习 <i data-lucide="arrow-right"></i></button>
+        </div>
+      </dialog>
+
       <nav class="mobile-tabs" aria-label="移动端主导航">
-        <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>材料</span></a>
-        <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>重点</span></a>
-        <a href="#/directions" data-module-link="directions"><i data-lucide="crosshair"></i><span>方向</span></a>
+        <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>文献</span></a>
+        <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>关键词</span></a>
         <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>模板</span></a>
       </nav>
       <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="关闭导航" hidden></button>

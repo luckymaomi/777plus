@@ -1,6 +1,6 @@
 import type { ModuleId, Route } from "../types";
 
-const modules = new Set<ModuleId>(["materials", "keywords", "directions", "templates"]);
+const modules = new Set<ModuleId>(["materials", "keywords", "templates"]);
 
 export function parseRoute(hash: string): Route {
   const value = hash.replace(/^#\/?/, "");

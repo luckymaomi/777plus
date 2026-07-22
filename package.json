@@ -7,8 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "start:local": "python -X utf8 start_index.py",
+    "check:start": "python -X utf8 start_index.py --check",
     "test": "vitest run",
-    "verify": "npm run test && npm run build"
+    "verify": "npm run test && npm run check:start && npm run build"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",

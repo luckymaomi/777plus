@@ -71,6 +71,7 @@
     "source": "关于印发南航高质量发展总体思路（2025年版）的通知.pdf",
     "category": "战略发展",
     "format": "pdf",
+    "status": "旧材料",
     "path": "materials/high-quality-development-2025.md",
     "sha256": "f9d7705be06da79c8f15fb378764427bf87524861a1b5d898ca08247b3f0a322",
     "characters": 11222,
@@ -88,15 +89,15 @@
     "lines": 436
   },
   {
-    "id": "flight-report-2024",
-    "title": "南货航飞行部2024年工作报告 V11",
-    "source": "南货航飞行部2024年工作报告 V11.docx",
+    "id": "cargo-report-2026",
+    "title": "南货航2026年工作报告",
+    "source": "南货航2026年工作报告.docx",
     "category": "工作报告",
     "format": "docx",
-    "path": "materials/flight-report-2024.md",
-    "sha256": "f0056032be6236ce5d141c67b6ba259084b1c28afb506bb4dd48b6e1959410d0",
-    "characters": 5459,
-    "lines": 93
+    "path": "materials/cargo-report-2026.md",
+    "sha256": "5a2829aa2e00125ee6be3aeabe50647860e90c20da5b4e90a64df337e63ed968",
+    "characters": 8408,
+    "lines": 153
   },
   {
     "id": "flight-report-2025",
@@ -104,21 +105,11 @@
     "source": "南货航飞行部2025年工作报告 V7（终稿）.docx",
     "category": "工作报告",
     "format": "docx",
+    "status": "旧材料",
     "path": "materials/flight-report-2025.md",
     "sha256": "c8adc5f9a3605d523717d4a5d47a26e7aea26a4941172303ee2b0632cb7c75a6",
     "characters": 9431,
     "lines": 129
-  },
-  {
-    "id": "logistics-strategy-decode-2024",
-    "title": "课件-南航物流公司战略及战略解码2024V1-学员版",
-    "source": "课件-南航物流公司战略及战略解码2024V1-学员版.pdf",
-    "category": "战略发展",
-    "format": "pdf",
-    "path": "materials/logistics-strategy-decode-2024.md",
-    "sha256": "309647b29c5a0dea59e5596bae6cc8a7bd04075ad524f3a8f86efdf49a021d1a",
-    "characters": 14630,
-    "lines": 510
   },
   {
     "id": "sunshine-csair-culture",

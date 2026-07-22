@@ -11,3 +11,5 @@
 **[现在开始复习](https://luckymaomi.github.io/777plus/)**
 
 [看看重点](content/topics.json) · [参与完善](CONTRIBUTING.md) · [安全说明](SECURITY.md) · [MIT License](LICENSE)
+
+本地预览：`python -X utf8 start_index.py`

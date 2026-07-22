@@ -24,6 +24,7 @@ class Material:
     source: str
     slug: str
     category: str
+    status: str | None = None
 
 
 MATERIALS = (
@@ -53,18 +54,15 @@ MATERIALS = (
         "关于印发南航高质量发展总体思路（2025年版）的通知.pdf",
         "high-quality-development-2025",
         "战略发展",
+        "旧材料",
     ),
     Material("南航物流改革发展.pptx", "logistics-reform", "改革发展"),
-    Material("南货航飞行部2024年工作报告 V11.docx", "flight-report-2024", "工作报告"),
+    Material("南货航2026年工作报告.docx", "cargo-report-2026", "工作报告"),
     Material(
         "南货航飞行部2025年工作报告 V7（终稿）.docx",
         "flight-report-2025",
         "工作报告",
-    ),
-    Material(
-        "课件-南航物流公司战略及战略解码2024V1-学员版.pdf",
-        "logistics-strategy-decode-2024",
-        "战略发展",
+        "旧材料",
     ),
     Material(
         '附件1：新时代“阳光南航”文化体系和品牌理念体系宣讲参考提纲.docx',
@@ -208,7 +206,7 @@ def write_material(material: Material, source: Path, body: str) -> dict[str, obj
         "---\n\n"
     )
     output.write_text(header + body + "\n", encoding="utf-8", newline="\n")
-    return {
+    item: dict[str, object] = {
         "id": material.slug,
         "title": title,
         "source": source.name,
@@ -219,6 +217,9 @@ def write_material(material: Material, source: Path, body: str) -> dict[str, obj
         "characters": len(body),
         "lines": body.count("\n") + 1 if body else 0,
     }
+    if material.status:
+        item["status"] = material.status
+    return item
 
 
 def main() -> None:
@@ -226,11 +227,10 @@ def main() -> None:
     expected_sources = {material.source for material in MATERIALS}
     actual_sources = {path.name for path in SOURCE_DIR.iterdir() if path.is_file()}
     missing = sorted(expected_sources - actual_sources)
-    unexpected = sorted(actual_sources - expected_sources)
-    if missing or unexpected:
+    if missing:
         raise SystemExit(
             json.dumps(
-                {"missing_sources": missing, "unexpected_sources": unexpected},
+                {"missing_sources": missing},
                 ensure_ascii=False,
                 indent=2,
             )

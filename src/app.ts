@@ -1,26 +1,28 @@
-import { createIcons, ArrowUpRight, Copy, Crosshair, FileText, Github, Highlighter, Inbox, Library, ListTree, Menu, Moon, NotebookPen, PanelLeftOpen, RotateCcw, Search, Sun } from "lucide";
+import { createIcons, ArrowRight, ArrowUpRight, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
 import type { AppData } from "./data";
-import type { AnswerTemplate, Material, ModuleId, Route, SearchResult } from "./types";
+import type { Material, ModuleId, Route, SearchResult } from "./types";
 import { parseRoute, routeHref } from "./core/routes";
 import { searchAll } from "./core/search";
-import { collectHeadings, prepareMarkdown } from "./core/markdown";
+import { prepareMarkdown } from "./core/markdown";
 import { escapeHtml } from "./core/text";
 import { renderMaterialsView } from "./views/materials";
 import { renderTopicsView } from "./views/topics";
-import { buildAnswerOutline, renderTemplatesView, type TemplateValues } from "./views/templates";
+import { buildAnswerText, renderTemplatesView } from "./views/templates";
 
-const iconSet = { ArrowUpRight, Copy, Crosshair, FileText, Github, Highlighter, Inbox, Library, ListTree, Menu, Moon, NotebookPen, PanelLeftOpen, RotateCcw, Search, Sun };
-const moduleNames: Record<ModuleId, string> = { materials: "原材料", keywords: "重点词", directions: "重点方向", templates: "答题模板" };
+const iconSet = { ArrowRight, ArrowUpRight, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
+const moduleNames: Record<ModuleId, string> = { materials: "文献综述", keywords: "关键词", templates: "答题模板" };
 
 export class App {
   private route: Route = parseRoute(window.location.hash);
   private materialQuery = "";
   private materialCategory = "";
-  private topicQueries: Record<"keyword" | "direction", string> = { keyword: "", direction: "" };
+  private topicQuery = "";
 
   constructor(private readonly data: AppData, private readonly main: HTMLElement) {
     this.bindShell();
     this.render();
+    this.bindGuide();
+    this.maybeOpenGuide();
   }
 
   private bindShell(): void {
@@ -54,8 +56,7 @@ export class App {
   private render(): void {
     const route = this.route;
     if (route.module === "materials") this.renderMaterials(route);
-    if (route.module === "keywords") this.renderTopicModule("keyword", route);
-    if (route.module === "directions") this.renderTopicModule("direction", route);
+    if (route.module === "keywords") this.renderTopicModule(route);
     if (route.module === "templates") this.renderTemplates(route);
     this.refreshShell();
     createIcons({ icons: iconSet });
@@ -81,26 +82,23 @@ export class App {
     });
     this.bindWorkspaceControls();
     const body = document.getElementById("markdownBody");
-    if (body) {
-      prepareMarkdown(body, route.needle);
-      this.renderToc(body);
-    }
+    if (body) prepareMarkdown(body, route.needle);
   }
 
-  private renderTopicModule(kind: "keyword" | "direction", route: Route): void {
-    const topics = this.data.topics.filter((topic) => topic.kind === kind);
+  private renderTopicModule(route: Route): void {
+    const topics = this.data.topics;
     const selected = topics.find((topic) => topic.id === route.itemId) ?? topics[0];
     if (!selected) return;
     this.main.innerHTML = renderTopicsView({
       topics,
       materials: this.data.materials,
       selected,
-      query: this.topicQueries[kind],
+      query: this.topicQuery,
     });
     const filter = document.getElementById("topicFilter") as HTMLInputElement | null;
     filter?.addEventListener("input", () => {
-      this.topicQueries[kind] = filter.value;
-      this.renderTopicModule(kind, this.route);
+      this.topicQuery = filter.value;
+      this.renderTopicModule(this.route);
       (document.getElementById("topicFilter") as HTMLInputElement | null)?.focus();
     });
     this.bindWorkspaceControls();
@@ -112,30 +110,17 @@ export class App {
   private renderTemplates(route: Route): void {
     const selected = this.data.templates.find((template) => template.id === route.itemId) ?? this.data.templates[0];
     if (!selected) return;
-    const values = this.readTemplateValues(selected);
-    this.main.innerHTML = renderTemplatesView(this.data.templates, selected, values);
-    const form = document.getElementById("templateForm") as HTMLFormElement | null;
-    form?.addEventListener("input", () => {
-      const next = Object.fromEntries(new FormData(form).entries()) as TemplateValues;
-      localStorage.setItem(this.templateStorageKey(selected), JSON.stringify(next));
-      this.updateAnswerPreview(selected, next);
-    });
-    document.querySelector("[data-copy-template]")?.addEventListener("click", () => {
-      void navigator.clipboard.writeText(buildAnswerOutline(selected, this.readFormValues(form)));
-      this.flashButton(document.querySelector("[data-copy-template]"));
-    });
-    document.querySelector("[data-reset-template]")?.addEventListener("click", () => {
-      localStorage.removeItem(this.templateStorageKey(selected));
-      this.renderTemplates(this.route);
+    this.main.innerHTML = renderTemplatesView(this.data.templates, selected, this.data.materials);
+    this.bindWorkspaceControls();
+    document.querySelector("[data-copy-answer]")?.addEventListener("click", () => {
+      void navigator.clipboard.writeText(buildAnswerText(selected, this.data.materials));
+      this.flashButton(document.querySelector("[data-copy-answer]"));
     });
   }
 
   private bindWorkspaceControls(): void {
     document.querySelector("[data-toggle-collection]")?.addEventListener("click", () => {
       document.getElementById("collectionPane")?.classList.toggle("is-open");
-    });
-    document.querySelector("[data-toggle-toc]")?.addEventListener("click", () => {
-      document.getElementById("tocPane")?.classList.toggle("is-open");
     });
     document.querySelector("[data-copy-source]")?.addEventListener("click", (event) => {
       const button = event.currentTarget as HTMLElement;
@@ -144,15 +129,27 @@ export class App {
     });
   }
 
-  private renderToc(body: HTMLElement): void {
-    const toc = document.getElementById("tocList");
-    if (!toc) return;
-    const headings = collectHeadings(body);
-    toc.innerHTML = headings.map((heading) => `<a href="#${escapeHtml(heading.id)}" data-level="${heading.level}">${escapeHtml(heading.text)}</a>`).join("");
-    toc.querySelectorAll("a").forEach((link) => link.addEventListener("click", (event) => {
-      event.preventDefault();
-      body.querySelector(`#${CSS.escape(link.getAttribute("href")?.slice(1) ?? "")}`)?.scrollIntoView({ behavior: "smooth" });
-    }));
+  private bindGuide(): void {
+    const dialog = document.getElementById("studyGuide") as HTMLDialogElement | null;
+    document.getElementById("guideOpen")?.addEventListener("click", () => dialog?.showModal());
+    document.getElementById("guideClose")?.addEventListener("click", () => this.closeGuide(dialog));
+    document.getElementById("guideStart")?.addEventListener("click", () => this.closeGuide(dialog));
+    dialog?.addEventListener("click", (event) => {
+      if (event.target === dialog) this.closeGuide(dialog);
+    });
+  }
+
+  private maybeOpenGuide(): void {
+    if (this.route.module !== "materials" || localStorage.getItem("777plus-guide-dismissed") === "1") return;
+    const dialog = document.getElementById("studyGuide") as HTMLDialogElement | null;
+    requestAnimationFrame(() => dialog?.showModal());
+  }
+
+  private closeGuide(dialog: HTMLDialogElement | null): void {
+    const remember = document.getElementById("guideRemember") as HTMLInputElement | null;
+    if (remember?.checked) localStorage.setItem("777plus-guide-dismissed", "1");
+    else localStorage.removeItem("777plus-guide-dismissed");
+    dialog?.close();
   }
 
   private renderSearchResults(query: string): void {
@@ -178,31 +175,7 @@ export class App {
     document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => link.classList.toggle("is-active", link.dataset.moduleLink === this.route.module));
     const context = document.getElementById("headerContext");
     if (context) context.textContent = moduleNames[this.route.module];
-    const status = document.getElementById("sourceStatus");
-    if (status) status.textContent = `${this.data.materials.length} 份材料`;
     document.title = `${moduleNames[this.route.module]} · 777plus`;
-  }
-
-  private updateAnswerPreview(template: AnswerTemplate, values: TemplateValues): void {
-    const outline = document.getElementById("answerOutline");
-    if (!outline) return;
-    outline.innerHTML = template.fields.map((field, index) => `<section><span>${String(index + 1).padStart(2, "0")}</span><div><h2>${escapeHtml(field.label)}</h2><p>${escapeHtml(values[field.id]?.trim() || "待填写")}</p></div></section>`).join("");
-  }
-
-  private readTemplateValues(template: AnswerTemplate): TemplateValues {
-    try {
-      return JSON.parse(localStorage.getItem(this.templateStorageKey(template)) ?? "{}") as TemplateValues;
-    } catch {
-      return {};
-    }
-  }
-
-  private readFormValues(form: HTMLFormElement | null): TemplateValues {
-    return form ? Object.fromEntries(new FormData(form).entries()) as TemplateValues : {};
-  }
-
-  private templateStorageKey(template: AnswerTemplate): string {
-    return `777plus-template-${template.id}`;
   }
 
   private findMaterial(id?: string): Material {
@@ -230,7 +203,6 @@ export class App {
     this.closeSidebar();
     this.hideSearchResults();
     document.getElementById("collectionPane")?.classList.remove("is-open");
-    document.getElementById("tocPane")?.classList.remove("is-open");
   }
 
   private hideSearchResults(): void {

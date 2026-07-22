@@ -24,7 +24,7 @@ export function searchAll(query: string, materials: Material[], topics: Topic[])
       id: material.id,
       module: "materials",
       title: material.title,
-      meta: material.category,
+      meta: material.status ? `${material.category} · ${material.status}` : material.category,
       snippet: makeSnippet(material.plainText, term),
       score: titleHit ? 100 : 50,
       needle: bodyHit ? term : undefined,
@@ -36,9 +36,9 @@ export function searchAll(query: string, materials: Material[], topics: Topic[])
     return [{
       type: "topic",
       id: topic.id,
-      module: topic.kind === "keyword" ? "keywords" : "directions",
+      module: "keywords",
       title: topic.label,
-      meta: topic.kind === "keyword" ? "重点词" : "重点方向",
+      meta: "关键词",
       snippet: `${topic.mappings.length} 处已整理原文`,
       score: 120,
     }];

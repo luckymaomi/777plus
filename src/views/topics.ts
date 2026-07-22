@@ -14,8 +14,8 @@ export function renderTopicsView(options: TopicViewOptions): string {
   const query = normalizeText(options.query);
   const visible = options.topics.filter((topic) => !query || normalizeText(topic.label).includes(query));
   const contexts = resolveTopicContexts(options.selected, options.materials);
-  const module = options.selected.kind === "keyword" ? "keywords" : "directions";
-  const moduleName = options.selected.kind === "keyword" ? "重点词" : "重点方向";
+  const module = "keywords";
+  const moduleName = "关键词";
   return `
     <section class="workspace workspace--topics">
       <aside class="collection-pane" id="collectionPane">

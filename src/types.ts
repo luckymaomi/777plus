@@ -1,4 +1,4 @@
-export type ModuleId = "materials" | "keywords" | "directions" | "templates";
+export type ModuleId = "materials" | "keywords" | "templates";
 
 export interface MaterialCatalogItem {
   id: string;
@@ -6,6 +6,7 @@ export interface MaterialCatalogItem {
   source: string;
   category: string;
   format: string;
+  status?: "旧材料";
   path: string;
   sha256: string;
   characters: number;
@@ -26,7 +27,7 @@ export interface TopicMapping {
 export interface Topic {
   id: string;
   label: string;
-  kind: "keyword" | "direction";
+  kind: "keyword";
   mappings: TopicMapping[];
 }
 
@@ -37,15 +38,29 @@ export interface ResolvedContext extends TopicMapping {
   targetBlock: string;
 }
 
-export interface AnswerField {
-  id: string;
-  label: string;
+export interface AnswerCitation extends TopicMapping {
+  quote: string;
 }
 
-export interface AnswerTemplate {
+export interface AnswerSection {
+  heading: string;
+  paragraphs: string[];
+  citations: AnswerCitation[];
+}
+
+export interface AnswerMemory {
+  sequence: string[];
+  tip: string;
+}
+
+export interface AnswerExample {
   id: string;
   label: string;
-  fields: AnswerField[];
+  question: string;
+  memory: AnswerMemory;
+  opening: string;
+  sections: AnswerSection[];
+  closing: string;
 }
 
 export interface Route {

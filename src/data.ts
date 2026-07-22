@@ -1,10 +1,10 @@
-import type { AnswerTemplate, Material, MaterialCatalogItem, Topic } from "./types";
+import type { AnswerExample, Material, MaterialCatalogItem, Topic } from "./types";
 import { stripFrontmatter, stripMarkdown } from "./core/text";
 
 export interface AppData {
   materials: Material[];
   topics: Topic[];
-  templates: AnswerTemplate[];
+  templates: AnswerExample[];
 }
 
 function contentUrl(path: string): string {
@@ -28,7 +28,7 @@ export async function loadAppData(): Promise<AppData> {
   const [catalog, topics, templates] = await Promise.all([
     fetchJson<MaterialCatalogItem[]>("catalog.json"),
     fetchJson<Topic[]>("topics.json"),
-    fetchJson<AnswerTemplate[]>("templates.json"),
+    fetchJson<AnswerExample[]>("templates.json"),
   ]);
   const materials = await Promise.all(catalog.map(async (item) => {
     const markdown = await fetchText(item.path);

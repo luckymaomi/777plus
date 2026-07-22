@@ -11,15 +11,6 @@ export function renderMarkdown(markdown: string): string {
 }
 
 export function prepareMarkdown(container: HTMLElement, needle?: string, scrollToMatch = true): void {
-  const usedIds = new Set<string>();
-  container.querySelectorAll<HTMLElement>("h1, h2, h3").forEach((heading, index) => {
-    const base = heading.textContent?.trim().replace(/\s+/g, "-").slice(0, 48) || `section-${index + 1}`;
-    let id = base;
-    let suffix = 2;
-    while (usedIds.has(id)) id = `${base}-${suffix++}`;
-    usedIds.add(id);
-    heading.id = id;
-  });
   container.querySelectorAll("table").forEach((table) => {
     if (table.parentElement?.classList.contains("table-scroll")) return;
     const wrapper = document.createElement("div");
@@ -35,12 +26,4 @@ export function prepareMarkdown(container: HTMLElement, needle?: string, scrollT
     target.classList.add("evidence-hit");
     if (scrollToMatch) requestAnimationFrame(() => target.scrollIntoView({ block: "center", behavior: "smooth" }));
   }
-}
-
-export function collectHeadings(container: HTMLElement): Array<{ id: string; text: string; level: number }> {
-  return [...container.querySelectorAll<HTMLElement>("h1, h2, h3")].map((heading) => ({
-    id: heading.id,
-    text: heading.textContent?.trim() ?? "",
-    level: Number(heading.tagName.slice(1)),
-  }));
 }

@@ -43,6 +43,7 @@
 ## 完整验证
 
 - `npm run verify`
+- `python -X utf8 start_index.py --check`
 
 收尾前运行项目完整验证和核心路径检查。无法运行时说明具体命令、原因和剩余风险。
 

@@ -2,14 +2,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/layout.css";
-import "./styles/components.css";
+import "./styles/shell.css";
+import "./styles/search.css";
+import "./styles/guide.css";
+import "./styles/collection.css";
+import "./styles/reader.css";
+import "./styles/topics.css";
+import "./styles/answers.css";
 import "./styles/markdown.css";
 import "./styles/responsive.css";
-import { createIcons, ArrowUpRight, Crosshair, Github, Highlighter, Library, Menu, Moon, NotebookPen, Search } from "lucide";
+import { createIcons, ArrowRight, ArrowUpRight, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } from "lucide";
 import { App } from "./app";
 import { loadAppData } from "./data";
 
-createIcons({ icons: { ArrowUpRight, Crosshair, Github, Highlighter, Library, Menu, Moon, NotebookPen, Search } });
+createIcons({ icons: { ArrowRight, ArrowUpRight, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } });
 
 const main = document.getElementById("appMain");
 if (!main) throw new Error("缺少应用入口");

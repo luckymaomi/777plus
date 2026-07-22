@@ -1,0 +1,55 @@
+.reader-header,
+.topic-header,
+.answer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 88px;
+  padding: 17px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.reader-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.reader-heading > div {
+  min-width: 0;
+}
+
+.reader-heading h1,
+.topic-header h1,
+.answer-header h1 {
+  overflow-wrap: anywhere;
+  margin: 3px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 680;
+  line-height: 1.32;
+}
+
+.eyebrow {
+  color: var(--teal-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.reader-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.reader-list-trigger {
+  display: none;
+}
+
+.reader-body {
+  padding: 36px clamp(24px, 5vw, 76px) 72px;
+}
