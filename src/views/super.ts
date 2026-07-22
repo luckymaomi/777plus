@@ -6,7 +6,7 @@ const anchorGroups = [
   { label: "发展主线", ids: ["1314-strategy", "global-flight", "high-quality-development"] },
 ];
 
-export function renderSuperView(terms: TermDefinition[], topics: Topic[], templates: AnswerExample[]): string {
+export function renderSuperView(terms: TermDefinition[], topics: Topic[], templates: AnswerExample[], overviewImage = "./assets/meng-key-points.jpg"): string {
   const topicMap = new Map(topics.map((topic) => [topic.id, topic]));
   const priorityTopics = topics.slice(0, 8);
   const firstTerm = terms[0];
@@ -24,8 +24,8 @@ export function renderSuperView(terms: TermDefinition[], topics: Topic[], templa
 
         <section class="super-section super-notes">
           <div class="super-section__heading"><div><span>01</span><h2>孟哥重点</h2></div><small>手写重点总览</small></div>
-          <a class="super-notes__image" href="./assets/meng-key-points.jpg" target="_blank" rel="noopener" title="打开孟哥重点原图">
-            <img src="./assets/meng-key-points.jpg" width="1746" height="1440" loading="lazy" decoding="async" alt="孟哥手写重点总览">
+          <a class="super-notes__image" href="${escapeHtml(overviewImage)}" target="_blank" rel="noopener" title="打开孟哥重点原图">
+            <img src="${escapeHtml(overviewImage)}" width="4096" height="3072" loading="lazy" decoding="async" alt="孟哥手写重点总览">
           </a>
         </section>
 

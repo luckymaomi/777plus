@@ -1,23 +1,26 @@
-import { createIcons, ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
+import { createIcons, ArrowRight, ArrowUpRight, BookMarked, Check, CircleHelp, Copy, Download, FileText, Github, Highlighter, Inbox, Library, LoaderCircle, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
 import type { AppData } from "./data";
 import type { Material, ModuleId, Route, SearchResult, StudyMode } from "./types";
 import { parseRoute, routeHref } from "./core/routes";
 import { searchAll } from "./core/search";
 import { resolveStudyMode, STUDY_MODE_STORAGE_KEY } from "./core/study-mode";
+import { readStorage, removeStorage, writeStorage } from "./core/storage";
 import { prepareMarkdown } from "./core/markdown";
+import { writeClipboardText } from "./core/clipboard";
 import { escapeHtml } from "./core/text";
 import { renderMaterialsView } from "./views/materials";
 import { renderSuperView } from "./views/super";
 import { renderTermsView } from "./views/terms";
 import { renderTopicsView } from "./views/topics";
 import { buildAnswerText, renderTemplatesView } from "./views/templates";
+import { bindOfflineExport } from "./export/controller";
 
-const iconSet = { ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
+const iconSet = { ArrowRight, ArrowUpRight, BookMarked, Check, CircleHelp, Copy, Download, FileText, Github, Highlighter, Inbox, Library, LoaderCircle, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
 const moduleNames: Record<ModuleId, string> = { terms: "名词解释", materials: "文献综述", keywords: "关键词", templates: "答题模板" };
 
 export class App {
   private route: Route = parseRoute(window.location.hash);
-  private mode: StudyMode = resolveStudyMode(localStorage.getItem(STUDY_MODE_STORAGE_KEY));
+  private mode: StudyMode = resolveStudyMode(readStorage(STUDY_MODE_STORAGE_KEY));
   private materialQuery = "";
   private materialCategory = "";
   private topicQuery = "";
@@ -38,6 +41,7 @@ export class App {
     document.getElementById("mobileMenu")?.addEventListener("click", () => this.openSidebar());
     document.getElementById("sidebarBackdrop")?.addEventListener("click", () => this.closeSidebar());
     document.getElementById("themeToggle")?.addEventListener("click", () => this.toggleTheme());
+    bindOfflineExport(this.data, () => createIcons({ icons: iconSet }));
     document.querySelectorAll<HTMLButtonElement>("[data-study-mode]").forEach((button) => {
       button.addEventListener("click", () => this.setStudyMode(resolveStudyMode(button.dataset.studyMode ?? null)));
     });
@@ -67,14 +71,14 @@ export class App {
         }
       }
     });
-    const storedTheme = localStorage.getItem("777plus-theme");
+    const storedTheme = readStorage("777plus-theme");
     if (storedTheme === "dark") document.documentElement.dataset.theme = "dark";
     this.refreshThemeIcon();
   }
 
   private render(): void {
     if (this.mode === "super") {
-      this.main.innerHTML = renderSuperView(this.data.terms, this.data.topics, this.data.templates);
+      this.main.innerHTML = renderSuperView(this.data.terms, this.data.topics, this.data.templates, this.data.overviewImage);
       this.refreshShell();
       createIcons({ icons: iconSet });
       return;
@@ -145,8 +149,8 @@ export class App {
     this.main.innerHTML = renderTemplatesView(this.data.templates, selected, this.data.materials);
     this.bindWorkspaceControls();
     document.querySelector("[data-copy-answer]")?.addEventListener("click", () => {
-      void navigator.clipboard.writeText(buildAnswerText(selected, this.data.materials));
-      this.flashButton(document.querySelector("[data-copy-answer]"));
+      void writeClipboardText(buildAnswerText(selected, this.data.materials))
+        .then(() => this.flashButton(document.querySelector("[data-copy-answer]")));
     });
   }
 
@@ -156,8 +160,7 @@ export class App {
     });
     document.querySelector("[data-copy-source]")?.addEventListener("click", (event) => {
       const button = event.currentTarget as HTMLElement;
-      void navigator.clipboard.writeText(button.dataset.copySource ?? "");
-      this.flashButton(button);
+      void writeClipboardText(button.dataset.copySource ?? "").then(() => this.flashButton(button));
     });
   }
 
@@ -172,15 +175,15 @@ export class App {
   }
 
   private maybeOpenGuide(): void {
-    if (this.mode !== "normal" || this.route.module !== "terms" || localStorage.getItem("777plus-guide-dismissed") === "1") return;
+    if (this.mode !== "normal" || this.route.module !== "terms" || readStorage("777plus-guide-dismissed") === "1") return;
     const dialog = document.getElementById("studyGuide") as HTMLDialogElement | null;
     requestAnimationFrame(() => dialog?.showModal());
   }
 
   private closeGuide(dialog: HTMLDialogElement | null): void {
     const remember = document.getElementById("guideRemember") as HTMLInputElement | null;
-    if (remember?.checked) localStorage.setItem("777plus-guide-dismissed", "1");
-    else localStorage.removeItem("777plus-guide-dismissed");
+    if (remember?.checked) writeStorage("777plus-guide-dismissed", "1");
+    else removeStorage("777plus-guide-dismissed");
     dialog?.close();
   }
 
@@ -216,7 +219,7 @@ export class App {
   private setStudyMode(mode: StudyMode): void {
     if (mode === this.mode) return;
     this.mode = mode;
-    localStorage.setItem(STUDY_MODE_STORAGE_KEY, mode);
+    writeStorage(STUDY_MODE_STORAGE_KEY, mode);
     (document.getElementById("studyGuide") as HTMLDialogElement | null)?.close();
     this.closeOverlays();
     this.render();
@@ -257,7 +260,7 @@ export class App {
   private toggleTheme(): void {
     const dark = document.documentElement.dataset.theme !== "dark";
     document.documentElement.dataset.theme = dark ? "dark" : "light";
-    localStorage.setItem("777plus-theme", dark ? "dark" : "light");
+    writeStorage("777plus-theme", dark ? "dark" : "light");
     this.refreshThemeIcon();
   }
 

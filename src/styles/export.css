@@ -1,0 +1,12 @@
+.icon-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.export-button.is-busy svg {
+  animation: export-spin 800ms linear infinite;
+}
+
+@keyframes export-spin {
+  to { transform: rotate(360deg); }
+}

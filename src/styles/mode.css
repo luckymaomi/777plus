@@ -43,7 +43,7 @@
 }
 
 @media (max-width: 360px) {
-  .header-actions > .icon-button {
+  .header-actions > .icon-button:not(.export-button) {
     display: none;
   }
 }

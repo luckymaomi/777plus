@@ -10,6 +10,7 @@ import type { AnswerExample, Material, MaterialCatalogItem, TermDefinition, Topi
 import { renderSuperView } from "../src/views/super";
 import { buildAnswerText } from "../src/views/templates";
 import { renderTermsView } from "../src/views/terms";
+import { serializeEmbeddedAppData } from "../src/data";
 
 const root = resolve(import.meta.dirname, "..");
 const indexHtml = readFileSync(resolve(root, "index.html"), "utf8");
@@ -123,10 +124,10 @@ describe("名词解释与超能模式", () => {
   });
 
   it("超能模式包含五分钟顺序和两套兜底结构", () => {
-    const html = renderSuperView(terms, topics, templates);
+    const html = renderSuperView(terms, topics, templates, "data:image/jpeg;base64,bWVuZw==");
     expect(html).toContain("5 分钟冲刺");
     expect(html).toContain("孟哥重点");
-    expect(html).toContain('./assets/meng-key-points.jpg');
+    expect(html).toContain('data:image/jpeg;base64,bWVuZw==');
     expect(existsSync(resolve(root, "content/assets/meng-key-points.jpg"))).toBe(true);
     expect(html).toContain("八个优先关键词");
     expect(html).toContain("业务痛点 / 岗位难题 → 原因分析 → 解决思路 → 岗位落实");
@@ -149,5 +150,29 @@ describe("名词解释与超能模式", () => {
     expect(indexHtml).toContain("所有能找到的重点都已经找到。所有材料，历史经验、终极解法现在全都都注入到了这个网页。你只需要直接用。");
     expect(indexHtml).toContain("现在饼烙出来了。不仅能用，而且所有的功能都不是为了炫技。");
     expect(parseRoute("").module).toBe("terms");
+  });
+});
+
+describe("完整离线版", () => {
+  it("安全内嵌同一应用所需的全部数据", () => {
+    const first = materials[0] as Material;
+    const data = {
+      materials: [{ ...first, body: "原文 </script> 仍需保留" }, ...materials.slice(1)],
+      topics,
+      terms,
+      templates,
+      overviewImage: "data:image/jpeg;base64,bWVuZw==",
+    };
+    const serialized = serializeEmbeddedAppData(data);
+    const restored = JSON.parse(serialized) as typeof data;
+    expect(restored).toEqual(data);
+    expect(restored.materials).toHaveLength(11);
+    expect(restored.overviewImage).toMatch(/^data:image\/jpeg;base64,/);
+    expect(serialized).not.toContain("</script>");
+  });
+
+  it("原页面提供离线版导出入口", () => {
+    expect(indexHtml).toContain('id="exportHtml"');
+    expect(indexHtml).toContain('title="导出完整离线版"');
   });
 });
