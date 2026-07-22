@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseRoute, routeHref } from "../src/core/routes";
@@ -125,6 +125,9 @@ describe("名词解释与超能模式", () => {
   it("超能模式包含五分钟顺序和两套兜底结构", () => {
     const html = renderSuperView(terms, topics, templates);
     expect(html).toContain("5 分钟冲刺");
+    expect(html).toContain("孟哥重点");
+    expect(html).toContain('./assets/meng-key-points.jpg');
+    expect(existsSync(resolve(root, "content/assets/meng-key-points.jpg"))).toBe(true);
     expect(html).toContain("八个优先关键词");
     expect(html).toContain("业务痛点 / 岗位难题 → 原因分析 → 解决思路 → 岗位落实");
     expect(html).toContain("主体理解 → 反面案例 → 困难分析 → 解决思路 → 岗位落实");
@@ -142,6 +145,7 @@ describe("名词解释与超能模式", () => {
     expect(indexHtml.indexOf('data-module-link="terms"')).toBeLessThan(indexHtml.indexOf('data-module-link="materials"'));
     expect(indexHtml).toContain('data-study-mode="normal"');
     expect(indexHtml).toContain('data-study-mode="super"');
+    expect(indexHtml).toContain("也感谢孟哥的重点整理");
     expect(indexHtml).toContain("所有能找到的重点都已经找到。所有材料，历史经验、终极解法现在全都都注入到了这个网页。你只需要直接用。");
     expect(indexHtml).toContain("现在饼烙出来了。不仅能用，而且所有的功能都不是为了炫技。");
     expect(parseRoute("").module).toBe("terms");

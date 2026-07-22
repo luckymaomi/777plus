@@ -10,6 +10,7 @@ import "./styles/reader.css";
 import "./styles/mode.css";
 import "./styles/terms.css";
 import "./styles/super.css";
+import "./styles/super-notes.css";
 import "./styles/topics.css";
 import "./styles/answers.css";
 import "./styles/markdown.css";

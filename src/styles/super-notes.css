@@ -1,0 +1,24 @@
+.super-notes__image {
+  display: block;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.super-notes__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.super-notes__image:hover {
+  border-color: var(--teal);
+}
+
+@media (max-width: 520px) {
+  .super-notes__image img {
+    width: 760px;
+    max-width: none;
+  }
+}
