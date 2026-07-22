@@ -1,8 +1,9 @@
-import type { AnswerExample, Material, MaterialCatalogItem, Topic } from "./types";
+import type { AnswerExample, Material, MaterialCatalogItem, TermDefinition, Topic } from "./types";
 import { stripFrontmatter, stripMarkdown } from "./core/text";
 
 export interface AppData {
   materials: Material[];
+  terms: TermDefinition[];
   topics: Topic[];
   templates: AnswerExample[];
 }
@@ -25,8 +26,9 @@ async function fetchText(path: string): Promise<string> {
 }
 
 export async function loadAppData(): Promise<AppData> {
-  const [catalog, topics, templates] = await Promise.all([
+  const [catalog, terms, topics, templates] = await Promise.all([
     fetchJson<MaterialCatalogItem[]>("catalog.json"),
+    fetchJson<TermDefinition[]>("terms.json"),
     fetchJson<Topic[]>("topics.json"),
     fetchJson<AnswerExample[]>("templates.json"),
   ]);
@@ -35,5 +37,5 @@ export async function loadAppData(): Promise<AppData> {
     const body = stripFrontmatter(markdown);
     return { ...item, markdown, body, plainText: stripMarkdown(body) };
   }));
-  return { materials, topics, templates };
+  return { materials, terms, topics, templates };
 }

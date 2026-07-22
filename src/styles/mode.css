@@ -1,0 +1,49 @@
+.mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  flex: 0 0 auto;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.mode-switch button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+.mode-switch button:hover {
+  color: var(--ink);
+}
+
+.mode-switch button.is-active {
+  background: var(--surface);
+  color: var(--teal-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 720px) {
+  .header-actions {
+    gap: 7px;
+  }
+
+  .mode-switch button {
+    padding-inline: 7px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-actions > .icon-button {
+    display: none;
+  }
+}

@@ -76,8 +76,7 @@
     flex: 1 1 auto;
   }
 
-  .global-search kbd,
-  .header-context {
+  .global-search kbd {
     display: none;
   }
 
@@ -105,6 +104,10 @@
 
   .study-guide__body {
     padding-inline: 16px;
+  }
+
+  .guide-message {
+    padding: 15px 16px;
   }
 
   .guide-item {
@@ -141,7 +144,7 @@
     left: 0;
     z-index: 45;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     height: var(--mobile-tabs-height);
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--line);

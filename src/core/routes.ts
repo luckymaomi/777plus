@@ -1,12 +1,12 @@
 import type { ModuleId, Route } from "../types";
 
-const modules = new Set<ModuleId>(["materials", "keywords", "templates"]);
+const modules = new Set<ModuleId>(["terms", "materials", "keywords", "templates"]);
 
 export function parseRoute(hash: string): Route {
   const value = hash.replace(/^#\/?/, "");
   const [path, query = ""] = value.split("?");
   const [rawModule, rawItem] = (path ?? "").split("/");
-  const module = modules.has(rawModule as ModuleId) ? (rawModule as ModuleId) : "materials";
+  const module = modules.has(rawModule as ModuleId) ? (rawModule as ModuleId) : "terms";
   const params = new URLSearchParams(query);
   return {
     module,

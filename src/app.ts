@@ -1,19 +1,23 @@
-import { createIcons, ArrowRight, ArrowUpRight, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
+import { createIcons, ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
 import type { AppData } from "./data";
-import type { Material, ModuleId, Route, SearchResult } from "./types";
+import type { Material, ModuleId, Route, SearchResult, StudyMode } from "./types";
 import { parseRoute, routeHref } from "./core/routes";
 import { searchAll } from "./core/search";
+import { resolveStudyMode, STUDY_MODE_STORAGE_KEY } from "./core/study-mode";
 import { prepareMarkdown } from "./core/markdown";
 import { escapeHtml } from "./core/text";
 import { renderMaterialsView } from "./views/materials";
+import { renderSuperView } from "./views/super";
+import { renderTermsView } from "./views/terms";
 import { renderTopicsView } from "./views/topics";
 import { buildAnswerText, renderTemplatesView } from "./views/templates";
 
-const iconSet = { ArrowRight, ArrowUpRight, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
-const moduleNames: Record<ModuleId, string> = { materials: "文献综述", keywords: "关键词", templates: "答题模板" };
+const iconSet = { ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Copy, FileText, Github, Highlighter, Inbox, Library, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
+const moduleNames: Record<ModuleId, string> = { terms: "名词解释", materials: "文献综述", keywords: "关键词", templates: "答题模板" };
 
 export class App {
   private route: Route = parseRoute(window.location.hash);
+  private mode: StudyMode = resolveStudyMode(localStorage.getItem(STUDY_MODE_STORAGE_KEY));
   private materialQuery = "";
   private materialCategory = "";
   private topicQuery = "";
@@ -34,6 +38,12 @@ export class App {
     document.getElementById("mobileMenu")?.addEventListener("click", () => this.openSidebar());
     document.getElementById("sidebarBackdrop")?.addEventListener("click", () => this.closeSidebar());
     document.getElementById("themeToggle")?.addEventListener("click", () => this.toggleTheme());
+    document.querySelectorAll<HTMLButtonElement>("[data-study-mode]").forEach((button) => {
+      button.addEventListener("click", () => this.setStudyMode(resolveStudyMode(button.dataset.studyMode ?? null)));
+    });
+    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => {
+      link.addEventListener("click", () => this.setStudyMode("normal"));
+    });
     const search = document.getElementById("globalSearch") as HTMLInputElement | null;
     search?.addEventListener("input", () => this.renderSearchResults(search.value));
     search?.addEventListener("focus", () => this.renderSearchResults(search.value));
@@ -47,6 +57,15 @@ export class App {
     document.addEventListener("click", (event) => {
       const target = event.target as Node;
       if (!document.getElementById("searchResults")?.contains(target) && target !== search) this.hideSearchResults();
+      if (target instanceof Element) {
+        const link = target.closest<HTMLAnchorElement>("[data-open-normal]");
+        if (link) {
+          event.preventDefault();
+          const href = link.getAttribute("href");
+          this.setStudyMode("normal");
+          if (href && window.location.hash !== href) window.location.hash = href;
+        }
+      }
     });
     const storedTheme = localStorage.getItem("777plus-theme");
     if (storedTheme === "dark") document.documentElement.dataset.theme = "dark";
@@ -54,12 +73,25 @@ export class App {
   }
 
   private render(): void {
+    if (this.mode === "super") {
+      this.main.innerHTML = renderSuperView(this.data.terms, this.data.topics, this.data.templates);
+      this.refreshShell();
+      createIcons({ icons: iconSet });
+      return;
+    }
     const route = this.route;
+    if (route.module === "terms") this.renderTerms(route);
     if (route.module === "materials") this.renderMaterials(route);
     if (route.module === "keywords") this.renderTopicModule(route);
     if (route.module === "templates") this.renderTemplates(route);
     this.refreshShell();
     createIcons({ icons: iconSet });
+  }
+
+  private renderTerms(route: Route): void {
+    const selected = this.data.terms.find((definition) => definition.id === route.itemId) ?? this.data.terms[0];
+    if (!selected) return;
+    this.main.innerHTML = renderTermsView(selected);
   }
 
   private renderMaterials(route: Route): void {
@@ -140,7 +172,7 @@ export class App {
   }
 
   private maybeOpenGuide(): void {
-    if (this.route.module !== "materials" || localStorage.getItem("777plus-guide-dismissed") === "1") return;
+    if (this.mode !== "normal" || this.route.module !== "terms" || localStorage.getItem("777plus-guide-dismissed") === "1") return;
     const dialog = document.getElementById("studyGuide") as HTMLDialogElement | null;
     requestAnimationFrame(() => dialog?.showModal());
   }
@@ -155,7 +187,7 @@ export class App {
   private renderSearchResults(query: string): void {
     const panel = document.getElementById("searchResults");
     if (!panel) return;
-    const results = searchAll(query, this.data.materials, this.data.topics);
+    const results = searchAll(query, this.data.materials, this.data.topics, this.data.terms);
     if (!query.trim()) {
       panel.hidden = true;
       return;
@@ -167,15 +199,27 @@ export class App {
 
   private searchResultHtml(result: SearchResult): string {
     const href = routeHref({ module: result.module, itemId: result.id, needle: result.needle });
-    const icon = result.type === "material" ? "file-text" : "highlighter";
-    return `<a class="search-result" href="${href}"><i data-lucide="${icon}"></i><span><b>${escapeHtml(result.title)}</b><small>${escapeHtml(result.meta)} · ${escapeHtml(result.snippet)}</small></span><i data-lucide="arrow-up-right"></i></a>`;
+    const icon = result.type === "material" ? "file-text" : result.type === "term" ? "book-marked" : "highlighter";
+    return `<a class="search-result" href="${href}" data-open-normal><i data-lucide="${icon}"></i><span><b>${escapeHtml(result.title)}</b><small>${escapeHtml(result.meta)} · ${escapeHtml(result.snippet)}</small></span><i data-lucide="arrow-up-right"></i></a>`;
   }
 
   private refreshShell(): void {
-    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => link.classList.toggle("is-active", link.dataset.moduleLink === this.route.module));
-    const context = document.getElementById("headerContext");
-    if (context) context.textContent = moduleNames[this.route.module];
-    document.title = `${moduleNames[this.route.module]} · 777plus`;
+    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => link.classList.toggle("is-active", this.mode === "normal" && link.dataset.moduleLink === this.route.module));
+    document.querySelectorAll<HTMLButtonElement>("[data-study-mode]").forEach((button) => {
+      const active = button.dataset.studyMode === this.mode;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    document.title = `${this.mode === "super" ? "5 分钟冲刺" : moduleNames[this.route.module]} · 777plus`;
+  }
+
+  private setStudyMode(mode: StudyMode): void {
+    if (mode === this.mode) return;
+    this.mode = mode;
+    localStorage.setItem(STUDY_MODE_STORAGE_KEY, mode);
+    (document.getElementById("studyGuide") as HTMLDialogElement | null)?.close();
+    this.closeOverlays();
+    this.render();
   }
 
   private findMaterial(id?: string): Material {

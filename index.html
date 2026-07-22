@@ -10,11 +10,12 @@
   <body>
     <div id="app" class="app-shell">
       <aside class="app-sidebar" id="appSidebar">
-        <a class="brand" href="#/materials" aria-label="777plus 文献综述">
+        <a class="brand" href="#/terms" data-open-normal aria-label="777plus 名词解释">
           <span class="brand-symbol" aria-hidden="true"><i data-lucide="plane"></i></span>
           <span class="brand-copy"><b>777plus</b><small>飞行部逢考必过</small></span>
         </a>
         <nav class="main-nav" aria-label="主导航">
+          <a href="#/terms" data-module-link="terms"><i data-lucide="book-marked"></i><span>名词解释</span></a>
           <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>文献综述</span></a>
           <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>关键词</span></a>
           <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>答题模板</span></a>
@@ -26,18 +27,21 @@
 
       <div class="app-column">
         <aside class="update-banner" aria-label="资料更新">
-          <p><strong>更新说明：</strong><span>文献综述，关键词，答题模板，更新时间7.22</span></p>
+          <p><strong>更新说明：</strong><span>名词解释，文献综述，关键词，答题模板，更新时间7.22</span></p>
         </aside>
         <header class="app-header">
           <button class="icon-button mobile-menu" type="button" id="mobileMenu" aria-label="打开导航" title="导航"><i data-lucide="menu"></i></button>
           <div class="global-search">
             <i data-lucide="search" aria-hidden="true"></i>
-            <input id="globalSearch" type="search" placeholder="搜索文献与关键词" autocomplete="off" spellcheck="false">
+            <input id="globalSearch" type="search" placeholder="搜索名词、文献与关键词" autocomplete="off" spellcheck="false">
             <kbd>/</kbd>
             <div class="search-results" id="searchResults" hidden></div>
           </div>
           <div class="header-actions">
-            <span class="header-context" id="headerContext">文献综述</span>
+            <div class="mode-switch" role="group" aria-label="复习模式">
+              <button type="button" data-study-mode="normal" aria-pressed="true">普通模式</button>
+              <button type="button" data-study-mode="super" aria-pressed="false">超能模式</button>
+            </div>
             <button class="icon-button" type="button" id="guideOpen" aria-label="打开复习指引" title="复习指引"><i data-lucide="circle-help"></i></button>
             <button class="icon-button" type="button" id="themeToggle" aria-label="切换主题" title="切换主题"><i data-lucide="moon"></i></button>
           </div>
@@ -51,26 +55,35 @@
         <div class="study-guide__header">
           <div>
             <span class="eyebrow">复习指引</span>
-            <h2 id="studyGuideTitle">先读原文，再抓重点，最后组织答案</h2>
+            <h2 id="studyGuideTitle">先懂名词，再读原文，最后组织答案</h2>
           </div>
           <button class="icon-button" type="button" id="guideClose" aria-label="关闭复习指引" title="关闭"><i data-lucide="x"></i></button>
         </div>
+        <section class="guide-message">
+          <p>所有能找到的重点都已经找到。所有材料，历史经验、终极解法现在全都都注入到了这个网页。你只需要直接用。</p>
+          <p>本项目受到思姐，邱哥，以及帆姐去年经验的巨大启发，我把所有有价值的东西全都搬了过来，且在很多地方做了优化。它仍在活跃更新中。</p>
+          <p>其他复习资料只会给你塞材料塞成充满历史与现在互相冲突的大合集。现在饼烙出来了。不仅能用，而且所有的功能都不是为了炫技。</p>
+        </section>
         <div class="study-guide__body">
           <section class="guide-item">
             <span class="guide-item__number">01</span>
-            <div><h3>文献综述</h3><p>先完整阅读工作报告、战略材料和安全规章，理解原文中的背景、任务与要求。</p></div>
+            <div><h3>名词解释</h3><p>先掌握核心概念和结构，再进入相关原文核对完整语境。</p></div>
           </section>
           <section class="guide-item">
             <span class="guide-item__number">02</span>
-            <div><h3>关键词</h3><p>再按关键词查看人工整理的相关段落与上下文，需要核实时可直接回到完整原文。</p></div>
+            <div><h3>文献综述</h3><p>先完整阅读工作报告、战略材料和安全规章，理解原文中的背景、任务与要求。</p></div>
           </section>
           <section class="guide-item">
             <span class="guide-item__number">03</span>
+            <div><h3>关键词</h3><p>再按关键词查看人工整理的相关段落与上下文，需要核实时可直接回到完整原文。</p></div>
+          </section>
+          <section class="guide-item">
+            <span class="guide-item__number">04</span>
             <div><h3>答题模板</h3><p>最后用题型结构梳理观点，把材料依据、问题分析和解决思路落到本岗位实际。</p></div>
           </section>
         </div>
         <div class="study-guide__sequence" aria-label="建议复习顺序">
-          <span>通读原文</span><i data-lucide="arrow-right"></i><span>复习重点</span><i data-lucide="arrow-right"></i><span>完成作答</span>
+          <span>理解名词</span><i data-lucide="arrow-right"></i><span>通读原文</span><i data-lucide="arrow-right"></i><span>完成作答</span>
         </div>
         <div class="study-guide__footer">
           <label><input id="guideRemember" type="checkbox" checked> 不再自动显示</label>
@@ -79,6 +92,7 @@
       </dialog>
 
       <nav class="mobile-tabs" aria-label="移动端主导航">
+        <a href="#/terms" data-module-link="terms"><i data-lucide="book-marked"></i><span>名词</span></a>
         <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>文献</span></a>
         <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>关键词</span></a>
         <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>模板</span></a>

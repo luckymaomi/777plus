@@ -1,0 +1,82 @@
+.terms-page {
+  height: 100%;
+  overflow: auto;
+  background: var(--surface);
+}
+
+.term-definition {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 44px 0 72px;
+  color: var(--ink);
+}
+
+.term-definition header {
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.term-definition header span {
+  color: var(--teal-dark);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.term-definition h1 {
+  margin: 7px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.term-definition h2 {
+  margin: 26px 0 8px;
+  font-size: 17px;
+  font-weight: 680;
+}
+
+.term-definition p {
+  margin: 18px 0 0;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.term-definition h2 + p {
+  margin-top: 0;
+}
+
+.term-definition p strong {
+  color: var(--teal-dark);
+}
+
+.term-definition > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 26px;
+  color: var(--ink-faint);
+  font-size: 11px;
+}
+
+.term-definition > a:hover {
+  color: var(--teal-dark);
+}
+
+.term-definition > a svg {
+  width: 13px;
+  height: 13px;
+}
+
+@media (max-width: 720px) {
+  .term-definition {
+    width: calc(100% - 36px);
+    padding: 30px 0 48px;
+  }
+
+  .term-definition h1 {
+    font-size: 23px;
+  }
+
+  .term-definition p {
+    font-size: 14px;
+  }
+}

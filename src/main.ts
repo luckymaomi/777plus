@@ -7,15 +7,18 @@ import "./styles/search.css";
 import "./styles/guide.css";
 import "./styles/collection.css";
 import "./styles/reader.css";
+import "./styles/mode.css";
+import "./styles/terms.css";
+import "./styles/super.css";
 import "./styles/topics.css";
 import "./styles/answers.css";
 import "./styles/markdown.css";
 import "./styles/responsive.css";
-import { createIcons, ArrowRight, ArrowUpRight, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } from "lucide";
+import { createIcons, ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } from "lucide";
 import { App } from "./app";
 import { loadAppData } from "./data";
 
-createIcons({ icons: { ArrowRight, ArrowUpRight, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } });
+createIcons({ icons: { ArrowRight, ArrowUpRight, BookMarked, CircleHelp, Github, Highlighter, Library, Menu, Moon, NotebookPen, Plane, Search, X } });
 
 const main = document.getElementById("appMain");
 if (!main) throw new Error("缺少应用入口");

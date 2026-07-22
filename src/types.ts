@@ -1,4 +1,5 @@
-export type ModuleId = "materials" | "keywords" | "templates";
+export type ModuleId = "terms" | "materials" | "keywords" | "templates";
+export type StudyMode = "normal" | "super";
 
 export interface MaterialCatalogItem {
   id: string;
@@ -63,6 +64,22 @@ export interface AnswerExample {
   closing: string;
 }
 
+export interface TermSection {
+  number: string;
+  heading: string;
+  key: string;
+  body: string;
+}
+
+export interface TermDefinition {
+  id: string;
+  label: string;
+  summary: string;
+  sections: TermSection[];
+  closing: string;
+  sourceTopicId: string;
+}
+
 export interface Route {
   module: ModuleId;
   itemId?: string;
@@ -70,7 +87,7 @@ export interface Route {
 }
 
 export interface SearchResult {
-  type: "material" | "topic";
+  type: "material" | "topic" | "term";
   id: string;
   module: ModuleId;
   title: string;

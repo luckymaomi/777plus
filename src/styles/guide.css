@@ -36,6 +36,28 @@
   padding: 6px 24px;
 }
 
+.guide-message {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.guide-message p {
+  margin: 0 0 9px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.guide-message p:first-child {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.guide-message p:last-child {
+  margin-bottom: 0;
+}
+
 .guide-item {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);

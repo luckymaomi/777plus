@@ -1,4 +1,4 @@
-import type { Material, SearchResult, Topic } from "../types";
+import type { Material, SearchResult, TermDefinition, Topic } from "../types";
 import { normalizeText } from "./text";
 
 function makeSnippet(text: string, query: string): string {
@@ -10,7 +10,7 @@ function makeSnippet(text: string, query: string): string {
   return `${start > 0 ? "…" : ""}${compact.slice(start, end)}${end < compact.length ? "…" : ""}`;
 }
 
-export function searchAll(query: string, materials: Material[], topics: Topic[]): SearchResult[] {
+export function searchAll(query: string, materials: Material[], topics: Topic[], terms: TermDefinition[]): SearchResult[] {
   const term = query.trim();
   const normalized = normalizeText(term);
   if (!normalized) return [];
@@ -44,7 +44,21 @@ export function searchAll(query: string, materials: Material[], topics: Topic[])
     }];
   });
 
-  return [...topicResults, ...materialResults]
+  const termResults = terms.flatMap<SearchResult>((definition) => {
+    const text = `${definition.label}${definition.summary}${definition.sections.map((section) => `${section.heading}${section.key}${section.body}`).join("")}${definition.closing}`;
+    if (!normalizeText(text).includes(normalized)) return [];
+    return [{
+      type: "term",
+      id: definition.id,
+      module: "terms",
+      title: definition.label,
+      meta: "名词解释",
+      snippet: makeSnippet(text, term),
+      score: normalizeText(definition.label).includes(normalized) ? 140 : 70,
+    }];
+  });
+
+  return [...termResults, ...topicResults, ...materialResults]
     .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title, "zh-CN"))
     .slice(0, 24);
 }
