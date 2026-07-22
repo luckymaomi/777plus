@@ -63,10 +63,6 @@
   color: var(--sidebar-ink);
 }
 
-.main-nav a.is-active {
-  box-shadow: inset 3px 0 var(--teal);
-}
-
 .sidebar-footer {
   display: grid;
   gap: 5px;
@@ -402,14 +398,14 @@
 
 .toc-list a {
   padding: 6px 8px;
-  border-left: 2px solid transparent;
+  border-radius: var(--radius-sm);
   color: var(--ink-soft);
   font-size: 11px;
   line-height: 1.45;
 }
 
 .toc-list a:hover {
-  border-left-color: var(--teal);
+  background: var(--surface);
   color: var(--ink);
 }
 
@@ -535,18 +531,20 @@
 .loading-state span {
   width: 24px;
   height: 24px;
-  border: 2px solid var(--line);
-  border-top-color: var(--teal);
+  background: var(--teal);
   border-radius: 50%;
-  animation: spin .7s linear infinite;
+  animation: pulse 1s ease-in-out infinite alternate;
 }
 
 .loading-state p {
   margin: 10px 0 0;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+@keyframes pulse {
+  to {
+    opacity: .35;
+    transform: scale(.72);
+  }
 }
 
 .template-header {

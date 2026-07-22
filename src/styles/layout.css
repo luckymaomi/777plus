@@ -30,7 +30,6 @@
   min-width: 0;
   background: #cdeee8;
   color: #123f38;
-  border-bottom: 1px solid #a8d9d0;
 }
 
 .update-banner a {
@@ -65,7 +64,6 @@
 :root[data-theme="dark"] .update-banner {
   background: #173d36;
   color: #c5eee6;
-  border-bottom-color: #245149;
 }
 
 :root[data-theme="dark"] .update-banner time {

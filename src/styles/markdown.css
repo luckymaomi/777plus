@@ -28,8 +28,7 @@
 
 .markdown-body h2 {
   margin: 2.2em 0 .8em;
-  padding-left: 12px;
-  border-left: 3px solid var(--teal);
+  color: var(--teal-dark);
   font-size: 19px;
 }
 
@@ -62,7 +61,8 @@
 
 .markdown-body blockquote {
   padding: 10px 14px;
-  border-left: 3px solid var(--gold);
+  border: 1px solid color-mix(in srgb, var(--gold) 42%, var(--line));
+  border-radius: var(--radius-sm);
   background: var(--gold-soft);
   color: var(--ink-soft);
 }
@@ -102,10 +102,9 @@
 .markdown-body .evidence-hit {
   margin-inline: -10px;
   padding: 7px 10px;
-  border-left: 3px solid var(--gold);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border: 1px solid color-mix(in srgb, var(--gold) 34%, var(--line));
+  border-radius: var(--radius-sm);
   background: var(--gold-soft);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 18%, transparent);
 }
 
 .context-body.markdown-body {
