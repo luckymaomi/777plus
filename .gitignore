@@ -1,0 +1,34 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local source materials and bootstrap instructions
+/考试素材合集/
+/skill.md
+
+# Office temporary files
+~$*.doc
+~$*.docx
+~$*.ppt
+~$*.pptx
+
+# Editor and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Python extraction cache
+__pycache__/
+*.py[cod]
+
+# JavaScript dependencies and generated output
+node_modules/
+dist/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Logs
+*.log

@@ -1,0 +1,594 @@
+[
+  {
+    "id": "1314-strategy",
+    "label": "一三一四",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "logistics-reform",
+        "needle": "公司将按照“一三一四”发展战略"
+      },
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "坚持“一三一四”战略定力"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "坚持“一三一四”战略定力"
+      }
+    ]
+  },
+  {
+    "id": "two-focus-one-prevention",
+    "label": "两抓一防",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "坚持“两抓一防”安全管理总体策略"
+      },
+      {
+        "materialId": "flight-report-2024",
+        "needle": "坚持“两抓一防”安全管理总体策略"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "严格落实公司“两抓一防”安全总策略"
+      }
+    ]
+  },
+  {
+    "id": "group-safety-battle",
+    "label": "集团安全硬仗",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "打好“强体系、提能力、智防控”硬仗"
+      },
+      {
+        "materialId": "flight-report-2024",
+        "needle": "推动“严管控、夯基础、防风险”安全硬仗任务"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "以“夯基础、防风险、严管控”安全硬仗为着力点"
+      }
+    ]
+  },
+  {
+    "id": "performance-view",
+    "label": "政绩观",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "exam-reference",
+        "needle": "当前全党上下在开展政绩观的学习教育"
+      }
+    ]
+  },
+  {
+    "id": "seven-safety-systems",
+    "label": "七大体系",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "纵深推进安全七大体系建设"
+      },
+      {
+        "materialId": "flight-report-2024",
+        "needle": "持续深化安全七大体系建设"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "纵深推进安全七大体系建设"
+      }
+    ]
+  },
+  {
+    "id": "revised-safety-regulation",
+    "label": "新修订的安全管理规定",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "ccar-398r1-2026",
+        "needle": "《民用航空安全管理规定》"
+      },
+      {
+        "materialId": "ccar-398r1-2026",
+        "needle": "核心变化：框架重构，分级施策"
+      },
+      {
+        "materialId": "ccar-398r1-2026",
+        "needle": "制度自查（6月30日前将自查整改情况报所在地监管局）"
+      }
+    ]
+  },
+  {
+    "id": "sunshine-csair",
+    "label": "阳光南航",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "sunshine-csair-culture",
+        "needle": "新时代“阳光南航”文化体系和品牌理念体系，是南航发展战略"
+      },
+      {
+        "materialId": "sunshine-csair-culture",
+        "needle": "文化品格定位是：阳光南航"
+      },
+      {
+        "materialId": "sunshine-csair-culture",
+        "needle": "公司传承创新的“阳光南航”文化体系内容包括核心理念、应用理念两个方面"
+      }
+    ]
+  },
+  {
+    "id": "four-explanations",
+    "label": "四个讲明",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "讲明形势、讲明态度、讲明任务、讲明对策"
+      },
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "讲明任务、讲明对策”（简称“四个讲明”）"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "2026年“四个讲明”形势任务教育宣讲提纲"
+      }
+    ]
+  },
+  {
+    "id": "five-five-six-six",
+    "label": "五五六六",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "全面落实南航集团“五五六六”高质量发展思路"
+      },
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "明确南航集团高质量发展总体思路"
+      }
+    ]
+  },
+  {
+    "id": "five-structural-adjustments",
+    "label": "五大结构调整",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "深入推进板块、航线网络、货源、客户、产品五大结构调整优化"
+      },
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "推进新一轮五大结构调整优化"
+      }
+    ]
+  },
+  {
+    "id": "seven-battles",
+    "label": "七场硬仗",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "坚决打赢2026年七场硬仗"
+      },
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "坚决打赢2026 年“七场硬仗”"
+      }
+    ]
+  },
+  {
+    "id": "ten-battles",
+    "label": "十场硬仗",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "坚决打赢物流公司2026年“十场硬仗”"
+      }
+    ]
+  },
+  {
+    "id": "system-capability-smart-control",
+    "label": "强体系、提能力、智防控",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "打好“强体系、提能力、智防控”硬仗"
+      },
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "一是强体系、提能力、智防控"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "强体系、提能力、智防控"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "一是强体系，深化 SMS 与业务融合"
+      }
+    ]
+  },
+  {
+    "id": "sms",
+    "label": "SMS",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "ccar-398r1-2026",
+        "needle": "安全管理体系（SMS）的构建与实施"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "持续优化飞行部 SMS 体系架构"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "持续落地SMS体系建设"
+      }
+    ]
+  },
+  {
+    "id": "flight-training-reform",
+    "label": "飞行训练改革",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "推进飞行训练改革走深走实"
+      },
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "推进飞行训练改革走深走实"
+      }
+    ]
+  },
+  {
+    "id": "key-teams",
+    "label": "关键队伍",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-notice-2026",
+        "needle": "聚焦提升关键队伍资质能力"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "提升关键队伍能力"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "链式培优关键队伍"
+      }
+    ]
+  },
+  {
+    "id": "risk-prevention-control",
+    "label": "风险防控",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "全域构建风险防控体系"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "抓实核心环节风险防控"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "提升风险防控措施精准性和有效性"
+      }
+    ]
+  },
+  {
+    "id": "safety-culture",
+    "label": "安全文化",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "sunshine-csair-culture",
+        "needle": "关于加强新时代民航安全文化建设的意见"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "深耕安全文化培育"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "弘扬正向安全文化"
+      }
+    ]
+  },
+  {
+    "id": "three-strict-three-love",
+    "label": "三严三爱",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "飞行员“三严三爱”专题安全文化宣讲活动"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "飞行部“三严三爱”的团队文化"
+      }
+    ]
+  },
+  {
+    "id": "global-flight",
+    "label": "全球飞、飞全球",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-report-2025",
+        "needle": "南货航“全球飞、飞全球”战略全面提速"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "紧紧围绕“全球飞、飞全球”战略目标"
+      }
+    ]
+  },
+  {
+    "id": "one-three-five",
+    "label": "1+3+5",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "构建“1+3+5”全球货机站点运行管理体系"
+      }
+    ]
+  },
+  {
+    "id": "digital-intelligence",
+    "label": "数智赋能",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "强化数智赋能、人才队伍两大支撑"
+      },
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "数智赋能"
+      }
+    ]
+  },
+  {
+    "id": "high-quality-development",
+    "label": "高质量发展",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "南航高质量发展总体思路"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "全面落实南航集团“五五六六”高质量发展思路"
+      },
+      {
+        "materialId": "sunshine-csair-culture",
+        "needle": "推动南航高质量发展、迈向世界一流的思想基础和精神动力"
+      }
+    ]
+  },
+  {
+    "id": "party-safety",
+    "label": "党建+安全",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-report-2025",
+        "needle": "持续探索“党建＋安全”工作模式"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "党建优势转化为安全运行、人才培养核心动能"
+      }
+    ]
+  },
+  {
+    "id": "one-branch-one-fortress",
+    "label": "一支部一堡垒",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-report-2025",
+        "needle": "打造“一支部一堡垒”"
+      }
+    ]
+  },
+  {
+    "id": "dual-training-one-delivery",
+    "label": "双培养一输送",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "落实“双培养一输送”机制"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "落实“双培养一输送”工作机制"
+      }
+    ]
+  },
+  {
+    "id": "three-capability-mechanism",
+    "label": "三能机制",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "“三能”机制深化建设"
+      }
+    ]
+  },
+  {
+    "id": "five-development",
+    "label": "五大发展",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "二、坚持五大发展"
+      }
+    ]
+  },
+  {
+    "id": "five-strategies",
+    "label": "五大战略",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "三、实施五大战略"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "五大战略全面落地"
+      }
+    ]
+  },
+  {
+    "id": "six-actions",
+    "label": "六大行动",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "四、推进六大行动"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "六大行动全面完成"
+      }
+    ]
+  },
+  {
+    "id": "six-transformations",
+    "label": "六大转变",
+    "kind": "keyword",
+    "mappings": [
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "五、实现六大转变"
+      },
+      {
+        "materialId": "four-explanations-group-logistics-2026",
+        "needle": "六大转变基本实现"
+      }
+    ]
+  },
+  {
+    "id": "safety",
+    "label": "安全",
+    "kind": "direction",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "坚决守牢安全底线"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "安全是发展的前提"
+      },
+      {
+        "materialId": "ccar-398r1-2026",
+        "needle": "核心变化：框架重构，分级施策"
+      }
+    ]
+  },
+  {
+    "id": "reform",
+    "label": "改革",
+    "kind": "direction",
+    "mappings": [
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "改革是激活发展动能的“金钥匙”"
+      },
+      {
+        "materialId": "logistics-reform",
+        "needle": "重点推动现代仓储、供应链管理及电商贸易板块的发展"
+      },
+      {
+        "materialId": "high-quality-development-2025",
+        "needle": "用改革的办法搞活机"
+      }
+    ]
+  },
+  {
+    "id": "performance",
+    "label": "绩效",
+    "kind": "direction",
+    "mappings": [
+      {
+        "materialId": "flight-report-2025",
+        "needle": "优化设置安全绩效指标体系管理目的 12 个"
+      },
+      {
+        "materialId": "flight-report-2024",
+        "needle": "调整安全绩效指标与预警规则设置"
+      },
+      {
+        "materialId": "logistics-strategy-decode-2024",
+        "needle": "任期业绩合同、年度业绩责任书、绩效合约、一人一表"
+      }
+    ]
+  },
+  {
+    "id": "party-business-integration",
+    "label": "党建融入中心",
+    "kind": "direction",
+    "mappings": [
+      {
+        "materialId": "flight-report-2025",
+        "needle": "创新党建载体，促进党建融入中心"
+      },
+      {
+        "materialId": "flight-report-2025",
+        "needle": "促进党建深度融入安全"
+      },
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "深度抓实党建融合，先锋示范赋能安全"
+      }
+    ]
+  },
+  {
+    "id": "flight-team-building",
+    "label": "飞行队伍建设",
+    "kind": "direction",
+    "mappings": [
+      {
+        "materialId": "flight-team-midyear-report-2026",
+        "needle": "2026年上半年，飞行部在南航集团党组"
+      },
+      {
+        "materialId": "four-explanations-cargo-2026",
+        "needle": "从严抓好飞行队伍管理，提升飞行员核心胜任力"
+      },
+      {
+        "materialId": "flight-report-2024",
+        "needle": "从严抓好飞行训练管理，进一步推动飞行队伍整体实力水平提升"
+      }
+    ]
+  }
+]

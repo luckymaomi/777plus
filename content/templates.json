@@ -1,0 +1,23 @@
+[
+  {
+    "id": "argument",
+    "label": "论述题",
+    "fields": [
+      { "id": "problem", "label": "业务痛点 / 岗位难题" },
+      { "id": "cause", "label": "原因分析" },
+      { "id": "solution", "label": "解决思路" },
+      { "id": "role", "label": "本岗位落点" }
+    ]
+  },
+  {
+    "id": "self-proposed",
+    "label": "自拟题目",
+    "fields": [
+      { "id": "understanding", "label": "对主体的理解" },
+      { "id": "counterexample", "label": "反面案例" },
+      { "id": "difficulty", "label": "困难分析" },
+      { "id": "solution", "label": "解决思路" },
+      { "id": "role", "label": "回到本岗位实际" }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="777plus 考试复习知识看板">
+    <meta name="theme-color" content="#17211f">
+    <title>777plus</title>
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <aside class="app-sidebar" id="appSidebar">
+        <a class="brand" href="#/materials" aria-label="777plus 素材库">
+          <span class="brand-mark">7+</span>
+          <span class="brand-copy"><b>777plus</b><small>复习看板</small></span>
+        </a>
+        <nav class="main-nav" aria-label="主导航">
+          <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>原材料</span></a>
+          <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>重点词</span></a>
+          <a href="#/directions" data-module-link="directions"><i data-lucide="crosshair"></i><span>重点方向</span></a>
+          <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>答题模板</span></a>
+        </nav>
+        <div class="sidebar-footer">
+          <a href="https://github.com/luckymaomi/777plus" target="_blank" rel="noreferrer" title="GitHub"><i data-lucide="github"></i><span>GitHub</span></a>
+          <span id="sourceStatus">正在载入</span>
+        </div>
+      </aside>
+
+      <div class="app-column">
+        <aside class="update-banner" aria-label="资料更新">
+          <a href="#/materials"><span>资料库已更新</span><b>12 份备考材料已整理入库</b><time datetime="2026-07-22">2026.07.22</time></a>
+        </aside>
+        <header class="app-header">
+          <button class="icon-button mobile-menu" type="button" id="mobileMenu" aria-label="打开导航" title="导航"><i data-lucide="menu"></i></button>
+          <div class="global-search">
+            <i data-lucide="search" aria-hidden="true"></i>
+            <input id="globalSearch" type="search" placeholder="搜索材料与重点" autocomplete="off" spellcheck="false">
+            <kbd>/</kbd>
+            <div class="search-results" id="searchResults" hidden></div>
+          </div>
+          <div class="header-actions">
+            <span class="header-context" id="headerContext">原材料</span>
+            <button class="icon-button" type="button" id="themeToggle" aria-label="切换主题" title="切换主题"><i data-lucide="moon"></i></button>
+          </div>
+        </header>
+        <main class="app-main" id="appMain">
+          <div class="loading-state"><span></span><p>正在整理材料</p></div>
+        </main>
+      </div>
+
+      <nav class="mobile-tabs" aria-label="移动端主导航">
+        <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>材料</span></a>
+        <a href="#/keywords" data-module-link="keywords"><i data-lucide="highlighter"></i><span>重点</span></a>
+        <a href="#/directions" data-module-link="directions"><i data-lucide="crosshair"></i><span>方向</span></a>
+        <a href="#/templates" data-module-link="templates"><i data-lucide="notebook-pen"></i><span>模板</span></a>
+      </nav>
+      <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="关闭导航" hidden></button>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
