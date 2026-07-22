@@ -142,7 +142,7 @@ describe("名词解释与超能模式", () => {
     expect(indexHtml.indexOf('data-module-link="terms"')).toBeLessThan(indexHtml.indexOf('data-module-link="materials"'));
     expect(indexHtml).toContain('data-study-mode="normal"');
     expect(indexHtml).toContain('data-study-mode="super"');
-    expect(indexHtml).toContain("所有能找到的，所有重点都已经找到。所有材料，历史经验、终极解法现在全都都注入到了这个网页。你只需要直接用。");
+    expect(indexHtml).toContain("所有能找到的重点都已经找到。所有材料，历史经验、终极解法现在全都都注入到了这个网页。你只需要直接用。");
     expect(indexHtml).toContain("现在饼烙出来了。不仅能用，而且所有的功能都不是为了炫技。");
     expect(parseRoute("").module).toBe("terms");
   });
