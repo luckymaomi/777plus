@@ -31,5 +31,56 @@
     ],
     "closing": "综上，“一三一四”战略是南航物流为打造“具有国际竞争力的现代综合物流服务商”而制定的顶层规划。",
     "sourceTopicId": "1314-strategy"
+  },
+  {
+    "id": "seven-battles",
+    "label": "七场硬仗",
+    "summary": "2026年七场硬仗包括：",
+    "sections": [
+      {
+        "number": "一",
+        "heading": "强体系、提能力、智防控",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "二",
+        "heading": "构建经营持续领先的核心能力",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "三",
+        "heading": "提升以广州枢纽为核心的大湾区控制力",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "四",
+        "heading": "强化“亲和精细”服务品牌竞争力",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "五",
+        "heading": "科创驱动，加快建设现代化民航产业体系",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "六",
+        "heading": "强化核心资源保障能力，大力提升运行效率",
+        "key": "",
+        "body": ""
+      },
+      {
+        "number": "七",
+        "heading": "加强思想政治工作，全面提高党建水平",
+        "key": "",
+        "body": ""
+      }
+    ],
+    "closing": "",
+    "sourceTopicId": "seven-battles"
   }
 ]

@@ -95,7 +95,8 @@ export class App {
   private renderTerms(route: Route): void {
     const selected = this.data.terms.find((definition) => definition.id === route.itemId) ?? this.data.terms[0];
     if (!selected) return;
-    this.main.innerHTML = renderTermsView(selected);
+    this.main.innerHTML = renderTermsView(this.data.terms, selected);
+    this.bindWorkspaceControls();
   }
 
   private renderMaterials(route: Route): void {

@@ -91,6 +91,10 @@
   grid-template-columns: 278px minmax(420px, 1fr);
 }
 
+.workspace--terms {
+  grid-template-columns: 252px minmax(0, 1fr);
+}
+
 .workspace--topics {
   grid-template-columns: 252px minmax(0, 1fr);
 }
@@ -112,6 +116,7 @@
 }
 
 .reader-pane,
+.term-pane,
 .topic-pane,
 .answer-reader {
   min-width: 0;
@@ -130,6 +135,7 @@
 }
 
 .reader-body,
+.term-pane,
 .topic-pane,
 .answer-document {
   overflow: auto;

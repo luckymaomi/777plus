@@ -120,7 +120,23 @@ describe("名词解释与超能模式", () => {
     const allSources = normalizeText(materials.map((material) => material.plainText).join("\n"));
     expect(definition.sections).toHaveLength(4);
     expect(definition.sections.filter((section) => allSources.includes(normalizeText(section.key)))).toHaveLength(4);
-    expect(renderTermsView(definition)).toContain("查看相关原文");
+    expect(renderTermsView(terms, definition)).toContain("查看相关原文");
+  });
+
+  it("七场硬仗完整保留七项已确认原文", () => {
+    const definition = terms.find((item) => item.id === "seven-battles") as TermDefinition;
+    const source = normalizeText(materials.map((material) => material.plainText).join("\n"));
+    expect(definition.sections.map((section) => section.heading)).toEqual([
+      "强体系、提能力、智防控",
+      "构建经营持续领先的核心能力",
+      "提升以广州枢纽为核心的大湾区控制力",
+      "强化“亲和精细”服务品牌竞争力",
+      "科创驱动，加快建设现代化民航产业体系",
+      "强化核心资源保障能力，大力提升运行效率",
+      "加强思想政治工作，全面提高党建水平",
+    ]);
+    expect(definition.sections.every((section) => source.includes(normalizeText(section.heading)))).toBe(true);
+    expect(renderTermsView(terms, definition)).toContain("2 个名词");
   });
 
   it("超能模式包含五分钟顺序和两套兜底结构", () => {
