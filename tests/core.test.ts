@@ -97,7 +97,7 @@ describe("没招了，就只看这一个", () => {
   it("单页完整包含知识、数字、关键词、答题骨架和万能表述", () => {
     expect(essentials.title).toBe("没招了，就只看这一个");
     expect(essentials.knowledge).toHaveLength(8);
-    expect(essentials.numbers).toHaveLength(10);
+    expect(essentials.numbers).toHaveLength(15);
     expect(essentials.keywordGroups).toHaveLength(6);
     expect(essentials.answerSteps).toHaveLength(5);
     expect(essentials.phrases).toHaveLength(6);
@@ -111,7 +111,12 @@ describe("没招了，就只看这一个", () => {
 
   it("量化数据保留材料时点和目标口径", () => {
     expect(essentials.numbers).toEqual(expect.arrayContaining([
-      { value: "14架", label: "南货航货机机队规模", asOf: "2026年上半年" },
+      { value: "2019年12月24日", label: "南货航成立", asOf: "当前口径" },
+      { value: "2021年8月13日", label: "南货航取得运营许可证", asOf: "当前口径" },
+      { value: "33条", label: "物流公司运营航线", asOf: "当前口径" },
+      { value: "19架", label: "物流公司飞机数量", asOf: "当前口径" },
+      { value: "14架", label: "南货航飞机数量", asOf: "当前口径" },
+      { value: "5架", label: "总队777飞机数量", asOf: "当前口径" },
       { value: "22条", label: "南货航运营国际航线", asOf: "2025年口径" },
       { value: "15.72小时", label: "南货航飞机日利用率", asOf: "2026年上半年" },
       { value: "不低于87%", label: "航班正常率目标", asOf: "2026年下半年工作目标" },
@@ -167,10 +172,14 @@ describe("名词解释与答题模板", () => {
   it("发展情况使用明确时点展示量化数据", () => {
     const development = terms.find((term) => term.id === "development-status") as TermDefinition;
     expect(development.facts).toEqual([
-      { value: "14架", label: "货机机队规模", asOf: "2026年上半年" },
+      { value: "2019年12月24日", label: "南货航成立", asOf: "当前口径" },
+      { value: "2021年8月13日", label: "南货航取得运营许可证", asOf: "当前口径" },
+      { value: "33条", label: "物流公司运营航线", asOf: "当前口径" },
+      { value: "19架", label: "物流公司飞机数量", asOf: "当前口径" },
+      { value: "14架", label: "南货航飞机数量", asOf: "当前口径" },
+      { value: "5架", label: "总队777飞机数量", asOf: "当前口径" },
       { value: "22条", label: "国际航线", asOf: "2025年口径" },
       { value: "第一个五年", label: "正式投入运行", asOf: "材料对2025年的表述" },
-      { value: "材料未载明", label: "精确成立日期", asOf: "当前11份材料" },
     ]);
     const html = renderTermsView(development, examFocus, materials);
     expect(html).toContain("关键数据");
@@ -369,14 +378,17 @@ describe("样式与离线版", () => {
     expect(serialized).not.toContain("</script>");
   });
 
-  it("桌面端和移动端均保留明确的完整离线版入口", () => {
+  it("桌面端和移动端均保留纯图标离线下载入口", () => {
     const responsiveCss = readFileSync(resolve(root, "src/styles/responsive.css"), "utf8");
     const controller = readFileSync(resolve(root, "src/export/controller.ts"), "utf8");
     expect(indexHtml).toContain('id="exportHtml"');
-    expect(indexHtml).toContain('title="下载完整离线版"');
-    expect(indexHtml).toContain("<span>完整离线版</span>");
+    expect(indexHtml).toContain('class="icon-button export-button"');
+    expect(indexHtml).toContain('aria-label="下载"');
+    expect(indexHtml).not.toMatch(/id="exportHtml"[^>]*title=/);
+    expect(indexHtml).not.toContain("<span>完整离线版</span>");
     expect(responsiveCss).not.toMatch(/\.export-button\s*\{[^}]*display:\s*none/is);
     expect(controller).toContain('"正在生成"');
-    expect(controller).toContain('"已下载"');
+    expect(controller).toContain('"下载完成"');
+    expect(controller).not.toContain("<span>");
   });
 });

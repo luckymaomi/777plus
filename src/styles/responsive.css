@@ -97,11 +97,6 @@
     flex-basis: 34px;
   }
 
-  .export-button {
-    height: 34px;
-    padding-inline: 9px;
-  }
-
   .global-search {
     left: 10px;
     right: 10px;
