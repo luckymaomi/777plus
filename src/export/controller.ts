@@ -3,8 +3,14 @@ import { downloadOfflineHtml } from "./html-export";
 
 type RefreshIcons = () => void;
 
-function setIcon(button: HTMLButtonElement, icon: "check" | "download" | "loader-circle", refreshIcons: RefreshIcons): void {
-  button.innerHTML = `<i data-lucide="${icon}"></i>`;
+function setState(
+  button: HTMLButtonElement,
+  icon: "check" | "download" | "loader-circle",
+  label: string,
+  refreshIcons: RefreshIcons,
+): void {
+  button.innerHTML = `<i data-lucide="${icon}"></i><span>${label}</span>`;
+  button.ariaLabel = label;
   refreshIcons();
 }
 
@@ -15,22 +21,22 @@ export function bindOfflineExport(data: AppData, refreshIcons: RefreshIcons): vo
     button.disabled = true;
     button.classList.add("is-busy");
     button.title = "正在生成完整离线版";
-    setIcon(button, "loader-circle", refreshIcons);
+    setState(button, "loader-circle", "正在生成", refreshIcons);
     try {
       await downloadOfflineHtml(data);
       button.classList.add("is-success");
-      setIcon(button, "check", refreshIcons);
+      setState(button, "check", "已下载", refreshIcons);
     } catch (error) {
       console.error("导出完整离线版失败", error);
       window.alert(error instanceof Error ? error.message : "导出失败，请稍后重试。");
-      setIcon(button, "download", refreshIcons);
+      setState(button, "download", "完整离线版", refreshIcons);
     } finally {
       button.disabled = false;
       button.classList.remove("is-busy");
-      button.title = "导出完整离线版";
+      button.title = "下载完整离线版";
       window.setTimeout(() => {
         button.classList.remove("is-success");
-        setIcon(button, "download", refreshIcons);
+        setState(button, "download", "完整离线版", refreshIcons);
       }, 1_200);
     }
   });

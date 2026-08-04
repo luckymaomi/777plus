@@ -26,7 +26,7 @@
           </div>
 
           <div class="header-actions">
-            <button class="icon-button export-button" type="button" id="exportHtml" aria-label="导出完整离线版" title="导出完整离线版"><i data-lucide="download"></i></button>
+            <button class="export-button" type="button" id="exportHtml" aria-label="下载完整离线版" title="下载完整离线版"><i data-lucide="download"></i><span>完整离线版</span></button>
             <button class="icon-button" type="button" id="guideOpen" aria-label="打开复习指引" title="复习指引"><i data-lucide="circle-help"></i></button>
           </div>
         </div>
@@ -38,6 +38,7 @@
             <section class="sidebar-group">
               <p class="sidebar-label">复习模块</p>
               <nav class="main-nav" aria-label="主导航">
+                <a href="#/essentials" data-module-link="essentials"><i data-lucide="book-open-check"></i><span>没招了，就只看这一个</span></a>
                 <a href="#/focus" data-module-link="focus"><i data-lucide="target"></i><span>考前重点</span></a>
                 <a href="#/materials" data-module-link="materials"><i data-lucide="library"></i><span>文献综述</span></a>
                 <a href="#/terms" data-module-link="terms"><i data-lucide="book-marked"></i><span>名词解释</span></a>
@@ -69,11 +70,12 @@
           <button class="icon-button" type="button" id="guideClose" aria-label="关闭复习指引" title="关闭"><i data-lucide="x"></i></button>
         </div>
         <div class="study-guide__body">
-          <section class="guide-item"><span class="guide-item__number">01</span><div><h3>考前重点</h3><p>先通读考试范围通告。</p></div></section>
-          <section class="guide-item"><span class="guide-item__number">02</span><div><h3>文献综述</h3><p>按文献目录阅读11份材料。</p></div></section>
-          <section class="guide-item"><span class="guide-item__number">03</span><div><h3>名词解释</h3><p>掌握八个名词及其必记要点。</p></div></section>
-          <section class="guide-item"><span class="guide-item__number">04</span><div><h3>答题模板</h3><p>按专项方向或“现状—问题—解决方案—岗位落实”结构组织论述。</p></div></section>
-          <section class="guide-item"><span class="guide-item__number">05</span><div><h3>大神经验</h3><p>查看孟哥笔记图片。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">01</span><div><h3>没招了，就只看这一个</h3><p>核心知识、数字、关键词和主观题表述。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">02</span><div><h3>考前重点</h3><p>通读考试范围通告。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">03</span><div><h3>文献综述</h3><p>按文献目录阅读11份材料。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">04</span><div><h3>名词解释</h3><p>掌握八个名词及其必记要点。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">05</span><div><h3>答题模板</h3><p>按专项方向或“现状—问题—解决方案—岗位落实”结构组织论述。</p></div></section>
+          <section class="guide-item"><span class="guide-item__number">06</span><div><h3>大神经验</h3><p>查看孟哥笔记图片。</p></div></section>
         </div>
         <div class="study-guide__footer">
           <label><input id="guideRemember" type="checkbox" checked> 不再自动显示</label>

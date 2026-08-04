@@ -98,7 +98,8 @@
   }
 
   .export-button {
-    display: none;
+    height: 34px;
+    padding-inline: 9px;
   }
 
   .global-search {

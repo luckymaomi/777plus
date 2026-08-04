@@ -1,4 +1,4 @@
-export type ModuleId = "focus" | "materials" | "terms" | "templates" | "experience";
+export type ModuleId = "essentials" | "focus" | "materials" | "terms" | "templates" | "experience";
 
 export interface MaterialCatalogItem {
   id: string;
@@ -65,6 +65,44 @@ export interface AnswerTemplate {
   closing: string;
 }
 
+export interface EssentialKnowledge {
+  id: string;
+  title: string;
+  summary: string;
+  bullets: string[];
+  evidenceIds: string[];
+}
+
+export interface EssentialNumber {
+  value: string;
+  label: string;
+  asOf: string;
+}
+
+export interface EssentialKeywordGroup {
+  label: string;
+  keywords: string[];
+}
+
+export interface EssentialAnswerStep {
+  heading: string;
+  body: string;
+}
+
+export interface EssentialPhrase {
+  label: string;
+  text: string;
+}
+
+export interface EssentialsData {
+  title: string;
+  knowledge: EssentialKnowledge[];
+  numbers: EssentialNumber[];
+  keywordGroups: EssentialKeywordGroup[];
+  answerSteps: EssentialAnswerStep[];
+  phrases: EssentialPhrase[];
+}
+
 export interface Route {
   module: ModuleId;
   itemId?: string;
@@ -72,7 +110,7 @@ export interface Route {
 }
 
 export interface SearchResult {
-  type: "material" | "focus" | "term" | "template";
+  type: "material" | "essential" | "focus" | "term" | "template";
   id: string;
   module: ModuleId;
   title: string;

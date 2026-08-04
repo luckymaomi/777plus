@@ -8,12 +8,14 @@ import { searchAll } from "../src/core/search";
 import { normalizeText, stripFrontmatter, stripMarkdown } from "../src/core/text";
 import type {
   AnswerTemplate,
+  EssentialsData,
   ExamFocusData,
   Material,
   MaterialCatalogItem,
   TermDefinition,
 } from "../src/types";
 import { renderExperienceView } from "../src/views/experience";
+import { renderEssentialsNavigation, renderEssentialsView } from "../src/views/essentials";
 import { renderFocusView } from "../src/views/focus";
 import { renderMaterialsNavigation } from "../src/views/materials";
 import { buildAnswerText, renderTemplatesView } from "../src/views/templates";
@@ -23,6 +25,7 @@ const root = resolve(import.meta.dirname, "..");
 const content = resolve(root, "content");
 const indexHtml = readFileSync(resolve(root, "index.html"), "utf8");
 const catalog = JSON.parse(readFileSync(resolve(content, "catalog.json"), "utf8")) as MaterialCatalogItem[];
+const essentials = JSON.parse(readFileSync(resolve(content, "essentials.json"), "utf8")) as EssentialsData;
 const examFocus = JSON.parse(readFileSync(resolve(content, "exam-focus.json"), "utf8")) as ExamFocusData;
 const terms = JSON.parse(readFileSync(resolve(content, "terms.json"), "utf8")) as TermDefinition[];
 const templates = JSON.parse(readFileSync(resolve(content, "templates.json"), "utf8")) as AnswerTemplate[];
@@ -33,6 +36,7 @@ const materials: Material[] = catalog.map((item) => {
 });
 const data: AppData = {
   materials,
+  essentials,
   examFocus,
   terms,
   templates,
@@ -68,9 +72,10 @@ describe("材料与考前重点", () => {
     expect(errors).toEqual([]);
   });
 
-  it("名词和模板引用的证据ID全部存在", () => {
+  it("冲刺资料、名词和模板引用的证据ID全部存在", () => {
     const evidenceIds = new Set(examFocus.evidence.map((item) => item.id));
     const references = [
+      ...essentials.knowledge.flatMap((item) => item.evidenceIds),
       ...terms.flatMap((term) => term.evidenceIds),
       ...templates.flatMap((template) => template.sections.flatMap((section) => section.evidenceIds)),
     ];
@@ -85,6 +90,32 @@ describe("材料与考前重点", () => {
     expect(html).not.toContain("重点目录");
     expect(html).not.toContain("evidence-item");
     expect(html).not.toContain("#/materials/");
+  });
+});
+
+describe("没招了，就只看这一个", () => {
+  it("单页完整包含知识、数字、关键词、答题骨架和万能表述", () => {
+    expect(essentials.title).toBe("没招了，就只看这一个");
+    expect(essentials.knowledge).toHaveLength(8);
+    expect(essentials.numbers).toHaveLength(10);
+    expect(essentials.keywordGroups).toHaveLength(6);
+    expect(essentials.answerSteps).toHaveLength(5);
+    expect(essentials.phrases).toHaveLength(6);
+    const html = renderEssentialsView(essentials);
+    ["核心知识", "数字速记", "关键词", "五步答题骨架", "万能表述"].forEach((heading) => {
+      expect(html).toContain(heading);
+    });
+    expect(renderEssentialsNavigation()).toContain("冲刺目录");
+    expect(html).not.toContain("#/materials/");
+  });
+
+  it("量化数据保留材料时点和目标口径", () => {
+    expect(essentials.numbers).toEqual(expect.arrayContaining([
+      { value: "14架", label: "南货航货机机队规模", asOf: "2026年上半年" },
+      { value: "22条", label: "南货航运营国际航线", asOf: "2025年口径" },
+      { value: "15.72小时", label: "南货航飞机日利用率", asOf: "2026年上半年" },
+      { value: "不低于87%", label: "航班正常率目标", asOf: "2026年下半年工作目标" },
+    ]));
   });
 });
 
@@ -197,6 +228,7 @@ describe("路由、搜索与模块边界", () => {
     expect(parseRoute("")).toEqual({ module: "focus" });
     expect(parseRoute("#/keywords/safety")).toEqual({ module: "focus" });
     expect(parseRoute("#/super")).toEqual({ module: "focus" });
+    expect(parseRoute("#/essentials/keywords")).toEqual({ module: "essentials", itemId: "keywords", needle: undefined });
   });
 
   it("材料路由保留原文定位参数", () => {
@@ -226,6 +258,9 @@ describe("路由、搜索与模块边界", () => {
     expect(searchAll("安全运行的确定性", data)).toEqual(expect.arrayContaining([
       expect.objectContaining({ type: "template", id: "safety-production" }),
     ]));
+    expect(searchAll("15.72小时", data)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ type: "essential", module: "essentials", id: "numbers" }),
+    ]));
   });
 
   it("文献目录没有分类筛选", () => {
@@ -235,8 +270,8 @@ describe("路由、搜索与模块边界", () => {
     expect(html).not.toContain("全部分类");
   });
 
-  it("主导航只保留当前五个模块并保持指定顺序", () => {
-    const links = ["focus", "materials", "terms", "templates", "experience"]
+  it("主导航只保留当前六个模块并保持指定顺序", () => {
+    const links = ["essentials", "focus", "materials", "terms", "templates", "experience"]
       .map((module) => indexHtml.indexOf(`data-module-link="${module}"`));
     expect(links.every((index) => index >= 0)).toBe(true);
     expect(links).toEqual([...links].sort((left, right) => left - right));
@@ -293,12 +328,14 @@ describe("样式与离线版", () => {
   it("正式页面不包含需求说明式措辞", () => {
     const source = [
       indexHtml,
+      readFileSync(resolve(root, "src/views/essentials.ts"), "utf8"),
       readFileSync(resolve(root, "src/views/focus.ts"), "utf8"),
       readFileSync(resolve(root, "src/views/terms.ts"), "utf8"),
       readFileSync(resolve(root, "src/views/templates.ts"), "utf8"),
       readFileSync(resolve(root, "src/views/experience.ts"), "utf8"),
       readFileSync(resolve(root, "content/terms.json"), "utf8"),
       readFileSync(resolve(root, "content/templates.json"), "utf8"),
+      readFileSync(resolve(root, "content/essentials.json"), "utf8"),
     ].join("\n");
     ["民间理解：", "原样展示，不转写，不追加结论", "不是官方标准答案", "也不承诺得分", "适用于"].forEach((phrase) => {
       expect(source).not.toContain(phrase);
@@ -324,14 +361,22 @@ describe("样式与离线版", () => {
     });
     const restored = JSON.parse(serialized) as AppData;
     expect(restored.materials).toHaveLength(11);
+    expect(restored.essentials.knowledge).toHaveLength(8);
+    expect(restored.essentials.answerSteps).toHaveLength(5);
     expect(restored.terms).toHaveLength(8);
     expect(restored.templates).toHaveLength(6);
     expect(restored.experienceImage).toMatch(/^data:image\/jpeg;base64,/);
     expect(serialized).not.toContain("</script>");
   });
 
-  it("原页面保留完整离线版导出入口", () => {
+  it("桌面端和移动端均保留明确的完整离线版入口", () => {
+    const responsiveCss = readFileSync(resolve(root, "src/styles/responsive.css"), "utf8");
+    const controller = readFileSync(resolve(root, "src/export/controller.ts"), "utf8");
     expect(indexHtml).toContain('id="exportHtml"');
-    expect(indexHtml).toContain('title="导出完整离线版"');
+    expect(indexHtml).toContain('title="下载完整离线版"');
+    expect(indexHtml).toContain("<span>完整离线版</span>");
+    expect(responsiveCss).not.toMatch(/\.export-button\s*\{[^}]*display:\s*none/is);
+    expect(controller).toContain('"正在生成"');
+    expect(controller).toContain('"已下载"');
   });
 });

@@ -5,6 +5,7 @@ import "./styles/shell.css";
 import "./styles/guide.css";
 import "./styles/collection.css";
 import "./styles/reader.css";
+import "./styles/essentials.css";
 import "./styles/terms.css";
 import "./styles/answers.css";
 import "./styles/markdown.css";

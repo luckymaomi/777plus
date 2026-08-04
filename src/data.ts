@@ -1,5 +1,6 @@
 import type {
   AnswerTemplate,
+  EssentialsData,
   ExamFocusData,
   Material,
   MaterialCatalogItem,
@@ -9,6 +10,7 @@ import { stripFrontmatter, stripMarkdown } from "./core/text";
 
 export interface AppData {
   materials: Material[];
+  essentials: EssentialsData;
   examFocus: ExamFocusData;
   terms: TermDefinition[];
   templates: AnswerTemplate[];
@@ -57,8 +59,9 @@ export async function loadAppData(): Promise<AppData> {
   const embedded = embeddedAppData();
   if (embedded) return embedded;
 
-  const [catalog, examFocus, terms, templates] = await Promise.all([
+  const [catalog, essentials, examFocus, terms, templates] = await Promise.all([
     fetchJson<MaterialCatalogItem[]>("catalog.json"),
+    fetchJson<EssentialsData>("essentials.json"),
     fetchJson<ExamFocusData>("exam-focus.json"),
     fetchJson<TermDefinition[]>("terms.json"),
     fetchJson<AnswerTemplate[]>("templates.json"),
@@ -71,6 +74,7 @@ export async function loadAppData(): Promise<AppData> {
 
   return {
     materials,
+    essentials,
     examFocus,
     terms,
     templates,

@@ -1,6 +1,7 @@
 import {
   ArrowUpRight,
   BookMarked,
+  BookOpenCheck,
   Check,
   ChevronRight,
   CircleHelp,
@@ -33,11 +34,13 @@ import { renderMaterialsNavigation, renderMaterialsView } from "./views/material
 import { renderTermsNavigation, renderTermsView } from "./views/terms";
 import { buildAnswerText, renderTemplatesNavigation, renderTemplatesView } from "./views/templates";
 import { renderExperienceNavigation, renderExperienceView } from "./views/experience";
+import { renderEssentialsNavigation, renderEssentialsView } from "./views/essentials";
 import { bindOfflineExport } from "./export/controller";
 
 const iconSet = {
   ArrowUpRight,
   BookMarked,
+  BookOpenCheck,
   Check,
   ChevronRight,
   CircleHelp,
@@ -58,6 +61,7 @@ const iconSet = {
 };
 
 const moduleNames: Record<ModuleId, string> = {
+  essentials: "没招了，就只看这一个",
   focus: "考前重点",
   materials: "文献综述",
   terms: "名词解释",
@@ -103,6 +107,7 @@ export class App {
   }
 
   private render(): void {
+    if (this.route.module === "essentials") this.renderEssentials(this.route);
     if (this.route.module === "focus") this.renderFocus();
     if (this.route.module === "materials") this.renderMaterials(this.route);
     if (this.route.module === "terms") this.renderTerms(this.route);
@@ -117,6 +122,17 @@ export class App {
     this.main.innerHTML = renderFocusView(this.data.examFocus);
     this.bindWorkspaceControls();
     window.scrollTo({ top: 0 });
+  }
+
+  private renderEssentials(route: Route): void {
+    this.setNavigation(renderEssentialsNavigation(route.itemId));
+    this.main.innerHTML = renderEssentialsView(this.data.essentials);
+    this.bindWorkspaceControls();
+    if (route.itemId) {
+      requestAnimationFrame(() => document.getElementById(`essentials-${route.itemId}`)?.scrollIntoView({ block: "start" }));
+    } else {
+      window.scrollTo({ top: 0 });
+    }
   }
 
   private renderMaterials(route: Route): void {
@@ -221,6 +237,7 @@ export class App {
     const href = routeHref({ module: result.module, itemId: result.id, needle: result.needle });
     const icon = {
       material: "file-text",
+      essential: "book-open-check",
       focus: "target",
       term: "book-marked",
       template: "notebook-pen",
