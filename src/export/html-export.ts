@@ -118,7 +118,7 @@ function embedData(node: Document, data: AppData): void {
 
 export async function buildSelfContainedAppHtml(data: AppData): Promise<string> {
   const { node, baseUrl } = await readAppShell();
-  const embeddedData: AppData = { ...data, overviewImage: await resourceAsDataUrl(data.overviewImage) };
+  const embeddedData: AppData = { ...data, experienceImage: await resourceAsDataUrl(data.experienceImage) };
   resetShell(node);
   embedData(node, embeddedData);
   await Promise.all([

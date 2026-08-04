@@ -1,12 +1,18 @@
-import type { AnswerExample, Material, MaterialCatalogItem, TermDefinition, Topic } from "./types";
+import type {
+  AnswerTemplate,
+  ExamFocusData,
+  Material,
+  MaterialCatalogItem,
+  TermDefinition,
+} from "./types";
 import { stripFrontmatter, stripMarkdown } from "./core/text";
 
 export interface AppData {
   materials: Material[];
+  examFocus: ExamFocusData;
   terms: TermDefinition[];
-  topics: Topic[];
-  templates: AnswerExample[];
-  overviewImage: string;
+  templates: AnswerTemplate[];
+  experienceImage: string;
 }
 
 const EMBEDDED_DATA_ID = "embeddedAppData";
@@ -50,16 +56,24 @@ async function fetchText(path: string): Promise<string> {
 export async function loadAppData(): Promise<AppData> {
   const embedded = embeddedAppData();
   if (embedded) return embedded;
-  const [catalog, terms, topics, templates] = await Promise.all([
+
+  const [catalog, examFocus, terms, templates] = await Promise.all([
     fetchJson<MaterialCatalogItem[]>("catalog.json"),
+    fetchJson<ExamFocusData>("exam-focus.json"),
     fetchJson<TermDefinition[]>("terms.json"),
-    fetchJson<Topic[]>("topics.json"),
-    fetchJson<AnswerExample[]>("templates.json"),
+    fetchJson<AnswerTemplate[]>("templates.json"),
   ]);
   const materials = await Promise.all(catalog.map(async (item) => {
     const markdown = await fetchText(item.path);
     const body = stripFrontmatter(markdown);
     return { ...item, markdown, body, plainText: stripMarkdown(body) };
   }));
-  return { materials, terms, topics, templates, overviewImage: contentUrl("assets/meng-key-points.jpg") };
+
+  return {
+    materials,
+    examFocus,
+    terms,
+    templates,
+    experienceImage: contentUrl("assets/meng-key-points.jpg"),
+  };
 }

@@ -1,55 +1,203 @@
-.reader-header,
-.topic-header,
-.answer-header {
+.content-page {
+  width: min(100%, calc(var(--content-width) + 96px));
+  margin: 0 auto;
+  padding: 34px 48px 84px;
+}
+
+.page-breadcrumb {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 88px;
-  padding: 17px 24px;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.reader-heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   min-width: 0;
-}
-
-.reader-heading > div {
-  min-width: 0;
-}
-
-.reader-heading h1,
-.topic-header h1,
-.answer-header h1 {
-  overflow-wrap: anywhere;
-  margin: 3px 0 0;
-  color: var(--ink);
-  font-size: 20px;
-  font-weight: 680;
-  line-height: 1.32;
-}
-
-.eyebrow {
-  color: var(--teal-dark);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
-
-.reader-actions {
-  display: flex;
+  margin-bottom: 28px;
   gap: 7px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.page-breadcrumb svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+.page-breadcrumb strong {
+  overflow: hidden;
+  color: var(--text-soft);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 34px;
+  gap: 24px;
+}
+
+.page-heading-row {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.page-heading-row > div {
+  min-width: 0;
+}
+
+.page-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent-hover);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: 34px;
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+}
+
+.page-header p {
+  max-width: 680px;
+  margin: 12px 0 0;
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.75;
 }
 
 .reader-list-trigger {
   display: none;
 }
 
+.focus-notice {
+  max-width: 720px;
+}
+
+.focus-notice h2 {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.focus-notice p {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 2;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.section-label svg {
+  width: 15px;
+  height: 15px;
+}
+
+.universal-statement {
+  margin-bottom: 30px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.universal-statement > .section-label {
+  margin-bottom: 12px;
+}
+
+.universal-statement p {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 560;
+  line-height: 1.9;
+}
+
+.evidence-list {
+  display: grid;
+}
+
+.content-section {
+  min-width: 0;
+  scroll-margin: calc(var(--header-height) + 28px);
+}
+
+.evidence-list {
+  gap: 12px;
+}
+
+.evidence-item {
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.evidence-item figcaption strong,
+.evidence-item figcaption span {
+  display: block;
+}
+
+.evidence-item figcaption strong {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 680;
+}
+
+.evidence-item figcaption span {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.evidence-item blockquote {
+  margin: 14px 0 0;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
+
 .reader-body {
-  padding: 36px clamp(24px, 5vw, 76px) 72px;
+  min-width: 0;
+}
+
+.experience-figure {
+  margin: 0;
+}
+
+.experience-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.experience-figure figcaption {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
 }

@@ -1,55 +1,96 @@
-.term-definition {
-  width: min(760px, calc(100% - 48px));
-  margin: 0 auto;
-  padding: 28px 0 72px;
-  color: var(--ink);
-}
-
-.term-definition h2 {
-  margin: 26px 0 8px;
-  font-size: 17px;
-  font-weight: 680;
+.term-definition > .section-label {
+  margin-bottom: 12px;
 }
 
 .term-definition p {
-  margin: 18px 0 0;
-  font-size: 15px;
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
   line-height: 1.9;
 }
 
-.term-definition h2 + p {
-  margin-top: 0;
+.term-definition {
+  margin-bottom: 34px;
 }
 
-.term-definition p strong {
-  color: var(--teal-dark);
+.term-definition p {
+  color: var(--text-soft);
 }
 
-.term-definition > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 26px;
-  color: var(--ink-faint);
-  font-size: 11px;
+.term-facts {
+  margin-bottom: 18px;
 }
 
-.term-definition > a:hover {
-  color: var(--teal-dark);
+.term-facts h2 {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.term-definition > a svg {
-  width: 13px;
-  height: 13px;
+.term-facts dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  gap: 8px;
 }
 
-@media (max-width: 720px) {
-  .term-definition {
-    width: calc(100% - 36px);
-    padding: 18px 0 48px;
-  }
+.term-facts dl > div {
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
 
-  .term-definition p {
-    font-size: 14px;
-  }
+.term-facts dt {
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 720;
+  overflow-wrap: anywhere;
+}
+
+.term-facts dd {
+  margin: 4px 0 0;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+
+.term-facts small {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.term-points {
+  margin-bottom: 48px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.term-points ol {
+  display: grid;
+  margin: 16px 0 0;
+  padding-left: 22px;
+  gap: 12px;
+}
+
+.term-points li {
+  padding-left: 4px;
+  color: var(--text-soft);
+  line-height: 1.78;
+}
+
+.term-points li::marker {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.term-evidence > .section-label {
+  margin-bottom: 14px;
 }

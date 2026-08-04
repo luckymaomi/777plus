@@ -1,29 +1,73 @@
-import { createIcons, ArrowRight, ArrowUpRight, BookMarked, Check, CircleHelp, Copy, Download, FileText, Github, Highlighter, Inbox, Library, LoaderCircle, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X } from "lucide";
+import {
+  ArrowUpRight,
+  BookMarked,
+  Check,
+  ChevronRight,
+  CircleHelp,
+  Copy,
+  createIcons,
+  Download,
+  FileText,
+  Image,
+  Library,
+  ListChecks,
+  LoaderCircle,
+  Menu,
+  NotebookPen,
+  PanelLeftOpen,
+  Quote,
+  Search,
+  Target,
+  X,
+} from "lucide";
 import type { AppData } from "./data";
-import type { Material, ModuleId, Route, SearchResult, StudyMode } from "./types";
+import type { Material, ModuleId, Route, SearchResult } from "./types";
 import { parseRoute, routeHref } from "./core/routes";
 import { searchAll } from "./core/search";
-import { resolveStudyMode, STUDY_MODE_STORAGE_KEY } from "./core/study-mode";
 import { readStorage, removeStorage, writeStorage } from "./core/storage";
 import { prepareMarkdown } from "./core/markdown";
 import { writeClipboardText } from "./core/clipboard";
 import { escapeHtml } from "./core/text";
-import { renderMaterialsView } from "./views/materials";
-import { renderSuperView } from "./views/super";
-import { renderTermsView } from "./views/terms";
-import { renderTopicsView } from "./views/topics";
-import { buildAnswerText, renderTemplatesView } from "./views/templates";
+import { renderFocusNavigation, renderFocusView } from "./views/focus";
+import { renderMaterialsNavigation, renderMaterialsView } from "./views/materials";
+import { renderTermsNavigation, renderTermsView } from "./views/terms";
+import { buildAnswerText, renderTemplatesNavigation, renderTemplatesView } from "./views/templates";
+import { renderExperienceNavigation, renderExperienceView } from "./views/experience";
 import { bindOfflineExport } from "./export/controller";
 
-const iconSet = { ArrowRight, ArrowUpRight, BookMarked, Check, CircleHelp, Copy, Download, FileText, Github, Highlighter, Inbox, Library, LoaderCircle, Menu, Moon, NotebookPen, PanelLeftOpen, Plane, Search, Sun, X };
-const moduleNames: Record<ModuleId, string> = { terms: "名词解释", materials: "文献综述", keywords: "关键词", templates: "答题模板" };
+const iconSet = {
+  ArrowUpRight,
+  BookMarked,
+  Check,
+  ChevronRight,
+  CircleHelp,
+  Copy,
+  Download,
+  FileText,
+  Image,
+  Library,
+  ListChecks,
+  LoaderCircle,
+  Menu,
+  NotebookPen,
+  PanelLeftOpen,
+  Quote,
+  Search,
+  Target,
+  X,
+};
+
+const moduleNames: Record<ModuleId, string> = {
+  focus: "考前重点",
+  materials: "文献综述",
+  terms: "名词解释",
+  templates: "答题模板",
+  experience: "大神经验",
+};
 
 export class App {
   private route: Route = parseRoute(window.location.hash);
-  private mode: StudyMode = resolveStudyMode(readStorage(STUDY_MODE_STORAGE_KEY));
   private materialQuery = "";
-  private materialCategory = "";
-  private topicQuery = "";
 
   constructor(private readonly data: AppData, private readonly main: HTMLElement) {
     this.bindShell();
@@ -40,14 +84,8 @@ export class App {
     });
     document.getElementById("mobileMenu")?.addEventListener("click", () => this.openSidebar());
     document.getElementById("sidebarBackdrop")?.addEventListener("click", () => this.closeSidebar());
-    document.getElementById("themeToggle")?.addEventListener("click", () => this.toggleTheme());
     bindOfflineExport(this.data, () => createIcons({ icons: iconSet }));
-    document.querySelectorAll<HTMLButtonElement>("[data-study-mode]").forEach((button) => {
-      button.addEventListener("click", () => this.setStudyMode(resolveStudyMode(button.dataset.studyMode ?? null)));
-    });
-    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => {
-      link.addEventListener("click", () => this.setStudyMode("normal"));
-    });
+
     const search = document.getElementById("globalSearch") as HTMLInputElement | null;
     search?.addEventListener("input", () => this.renderSearchResults(search.value));
     search?.addEventListener("focus", () => this.renderSearchResults(search.value));
@@ -61,108 +99,84 @@ export class App {
     document.addEventListener("click", (event) => {
       const target = event.target as Node;
       if (!document.getElementById("searchResults")?.contains(target) && target !== search) this.hideSearchResults();
-      if (target instanceof Element) {
-        const link = target.closest<HTMLAnchorElement>("[data-open-normal]");
-        if (link) {
-          event.preventDefault();
-          const href = link.getAttribute("href");
-          this.setStudyMode("normal");
-          if (href && window.location.hash !== href) window.location.hash = href;
-        }
-      }
     });
-    const storedTheme = readStorage("777plus-theme");
-    if (storedTheme === "dark") document.documentElement.dataset.theme = "dark";
-    this.refreshThemeIcon();
   }
 
   private render(): void {
-    if (this.mode === "super") {
-      this.main.innerHTML = renderSuperView(this.data.terms, this.data.topics, this.data.templates, this.data.overviewImage);
-      this.refreshShell();
-      createIcons({ icons: iconSet });
-      return;
-    }
-    const route = this.route;
-    if (route.module === "terms") this.renderTerms(route);
-    if (route.module === "materials") this.renderMaterials(route);
-    if (route.module === "keywords") this.renderTopicModule(route);
-    if (route.module === "templates") this.renderTemplates(route);
+    if (this.route.module === "focus") this.renderFocus();
+    if (this.route.module === "materials") this.renderMaterials(this.route);
+    if (this.route.module === "terms") this.renderTerms(this.route);
+    if (this.route.module === "templates") this.renderTemplates(this.route);
+    if (this.route.module === "experience") this.renderExperience();
     this.refreshShell();
     createIcons({ icons: iconSet });
   }
 
-  private renderTerms(route: Route): void {
-    const selected = this.data.terms.find((definition) => definition.id === route.itemId) ?? this.data.terms[0];
-    if (!selected) return;
-    this.main.innerHTML = renderTermsView(this.data.terms, selected);
+  private renderFocus(): void {
+    this.setNavigation(renderFocusNavigation());
+    this.main.innerHTML = renderFocusView(this.data.examFocus);
     this.bindWorkspaceControls();
+    window.scrollTo({ top: 0 });
   }
 
   private renderMaterials(route: Route): void {
     const selected = this.findMaterial(route.itemId);
-    this.main.innerHTML = renderMaterialsView({
-      materials: this.data.materials,
-      selected,
-      query: this.materialQuery,
-      category: this.materialCategory,
-    });
+    const options = { materials: this.data.materials, selected, query: this.materialQuery };
+    this.setNavigation(renderMaterialsNavigation(options));
+    this.main.innerHTML = renderMaterialsView(options);
     const filter = document.getElementById("materialFilter") as HTMLInputElement | null;
     filter?.addEventListener("input", () => {
       this.materialQuery = filter.value;
       this.renderMaterials(this.route);
       (document.getElementById("materialFilter") as HTMLInputElement | null)?.focus();
     });
-    document.getElementById("categoryFilter")?.addEventListener("change", (event) => {
-      this.materialCategory = (event.target as HTMLSelectElement).value;
-      this.renderMaterials(this.route);
-    });
     this.bindWorkspaceControls();
     const body = document.getElementById("markdownBody");
     if (body) prepareMarkdown(body, route.needle);
+    window.scrollTo({ top: 0 });
   }
 
-  private renderTopicModule(route: Route): void {
-    const topics = this.data.topics;
-    const selected = topics.find((topic) => topic.id === route.itemId) ?? topics[0];
+  private renderTerms(route: Route): void {
+    const selected = this.data.terms.find((definition) => definition.id === route.itemId) ?? this.data.terms[0];
     if (!selected) return;
-    this.main.innerHTML = renderTopicsView({
-      topics,
-      materials: this.data.materials,
-      selected,
-      query: this.topicQuery,
-    });
-    const filter = document.getElementById("topicFilter") as HTMLInputElement | null;
-    filter?.addEventListener("input", () => {
-      this.topicQuery = filter.value;
-      this.renderTopicModule(this.route);
-      (document.getElementById("topicFilter") as HTMLInputElement | null)?.focus();
-    });
+    this.setNavigation(renderTermsNavigation(this.data.terms, selected));
+    this.main.innerHTML = renderTermsView(selected, this.data.examFocus, this.data.materials);
     this.bindWorkspaceControls();
-    document.querySelectorAll<HTMLElement>(".context-body").forEach((context) => {
-      prepareMarkdown(context, context.dataset.contextNeedle, false);
-    });
+    window.scrollTo({ top: 0 });
   }
 
   private renderTemplates(route: Route): void {
     const selected = this.data.templates.find((template) => template.id === route.itemId) ?? this.data.templates[0];
     if (!selected) return;
-    this.main.innerHTML = renderTemplatesView(this.data.templates, selected, this.data.materials);
+    this.setNavigation(renderTemplatesNavigation(this.data.templates, selected));
+    this.main.innerHTML = renderTemplatesView(selected, this.data.examFocus, this.data.materials);
     this.bindWorkspaceControls();
     document.querySelector("[data-copy-answer]")?.addEventListener("click", () => {
-      void writeClipboardText(buildAnswerText(selected, this.data.materials))
+      void writeClipboardText(buildAnswerText(selected, this.data.examFocus, this.data.materials))
         .then(() => this.flashButton(document.querySelector("[data-copy-answer]")));
     });
+    window.scrollTo({ top: 0 });
+  }
+
+  private renderExperience(): void {
+    this.setNavigation(renderExperienceNavigation());
+    this.main.innerHTML = renderExperienceView(this.data.experienceImage);
+    this.bindWorkspaceControls();
+    window.scrollTo({ top: 0 });
   }
 
   private bindWorkspaceControls(): void {
-    document.querySelector("[data-toggle-collection]")?.addEventListener("click", () => {
-      document.getElementById("collectionPane")?.classList.toggle("is-open");
-    });
+    document.querySelector("[data-toggle-collection]")?.addEventListener("click", () => this.openSidebar());
     document.querySelector("[data-copy-source]")?.addEventListener("click", (event) => {
       const button = event.currentTarget as HTMLElement;
       void writeClipboardText(button.dataset.copySource ?? "").then(() => this.flashButton(button));
     });
+  }
+
+  private setNavigation(html: string): void {
+    const navigation = document.getElementById("sectionNavigation");
+    if (!navigation) throw new Error("缺少模块导航入口");
+    navigation.innerHTML = html;
   }
 
   private bindGuide(): void {
@@ -176,7 +190,7 @@ export class App {
   }
 
   private maybeOpenGuide(): void {
-    if (this.mode !== "normal" || this.route.module !== "terms" || readStorage("777plus-guide-dismissed") === "1") return;
+    if (this.route.module !== "focus" || this.route.itemId || readStorage("777plus-guide-dismissed") === "1") return;
     const dialog = document.getElementById("studyGuide") as HTMLDialogElement | null;
     requestAnimationFrame(() => dialog?.showModal());
   }
@@ -191,39 +205,34 @@ export class App {
   private renderSearchResults(query: string): void {
     const panel = document.getElementById("searchResults");
     if (!panel) return;
-    const results = searchAll(query, this.data.materials, this.data.topics, this.data.terms);
+    const results = searchAll(query, this.data);
     if (!query.trim()) {
       panel.hidden = true;
       return;
     }
-    panel.innerHTML = results.length ? results.map((result) => this.searchResultHtml(result)).join("") : `<div class="search-empty">没有匹配内容</div>`;
+    panel.innerHTML = results.length
+      ? results.map((result) => this.searchResultHtml(result)).join("")
+      : `<div class="search-empty">没有匹配内容</div>`;
     panel.hidden = false;
     createIcons({ icons: iconSet });
   }
 
   private searchResultHtml(result: SearchResult): string {
     const href = routeHref({ module: result.module, itemId: result.id, needle: result.needle });
-    const icon = result.type === "material" ? "file-text" : result.type === "term" ? "book-marked" : "highlighter";
-    return `<a class="search-result" href="${href}" data-open-normal><i data-lucide="${icon}"></i><span><b>${escapeHtml(result.title)}</b><small>${escapeHtml(result.meta)} · ${escapeHtml(result.snippet)}</small></span><i data-lucide="arrow-up-right"></i></a>`;
+    const icon = {
+      material: "file-text",
+      focus: "target",
+      term: "book-marked",
+      template: "notebook-pen",
+    }[result.type];
+    return `<a class="search-result" href="${href}"><i data-lucide="${icon}"></i><span><b>${escapeHtml(result.title)}</b><small>${escapeHtml(result.meta)} · ${escapeHtml(result.snippet)}</small></span><i data-lucide="arrow-up-right"></i></a>`;
   }
 
   private refreshShell(): void {
-    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => link.classList.toggle("is-active", this.mode === "normal" && link.dataset.moduleLink === this.route.module));
-    document.querySelectorAll<HTMLButtonElement>("[data-study-mode]").forEach((button) => {
-      const active = button.dataset.studyMode === this.mode;
-      button.classList.toggle("is-active", active);
-      button.setAttribute("aria-pressed", String(active));
+    document.querySelectorAll<HTMLElement>("[data-module-link]").forEach((link) => {
+      link.classList.toggle("is-active", link.dataset.moduleLink === this.route.module);
     });
-    document.title = `${this.mode === "super" ? "5 分钟冲刺" : moduleNames[this.route.module]} · 777plus`;
-  }
-
-  private setStudyMode(mode: StudyMode): void {
-    if (mode === this.mode) return;
-    this.mode = mode;
-    writeStorage(STUDY_MODE_STORAGE_KEY, mode);
-    (document.getElementById("studyGuide") as HTMLDialogElement | null)?.close();
-    this.closeOverlays();
-    this.render();
+    document.title = `${moduleNames[this.route.module]} · 777plus`;
   }
 
   private findMaterial(id?: string): Material {
@@ -250,7 +259,6 @@ export class App {
   private closeOverlays(): void {
     this.closeSidebar();
     this.hideSearchResults();
-    document.getElementById("collectionPane")?.classList.remove("is-open");
   }
 
   private hideSearchResults(): void {
@@ -258,17 +266,4 @@ export class App {
     if (panel) panel.hidden = true;
   }
 
-  private toggleTheme(): void {
-    const dark = document.documentElement.dataset.theme !== "dark";
-    document.documentElement.dataset.theme = dark ? "dark" : "light";
-    writeStorage("777plus-theme", dark ? "dark" : "light");
-    this.refreshThemeIcon();
-  }
-
-  private refreshThemeIcon(): void {
-    const button = document.getElementById("themeToggle");
-    if (!button) return;
-    button.innerHTML = `<i data-lucide="${document.documentElement.dataset.theme === "dark" ? "sun" : "moon"}"></i>`;
-    createIcons({ icons: iconSet });
-  }
 }

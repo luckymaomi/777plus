@@ -1,4 +1,5 @@
-import type { Material, SearchResult, TermDefinition, Topic } from "../types";
+import type { AppData } from "../data";
+import type { SearchResult } from "../types";
 import { normalizeText } from "./text";
 
 function makeSnippet(text: string, query: string): string {
@@ -10,12 +11,12 @@ function makeSnippet(text: string, query: string): string {
   return `${start > 0 ? "…" : ""}${compact.slice(start, end)}${end < compact.length ? "…" : ""}`;
 }
 
-export function searchAll(query: string, materials: Material[], topics: Topic[], terms: TermDefinition[]): SearchResult[] {
+export function searchAll(query: string, data: AppData): SearchResult[] {
   const term = query.trim();
   const normalized = normalizeText(term);
   if (!normalized) return [];
 
-  const materialResults = materials.flatMap<SearchResult>((material) => {
+  const materialResults = data.materials.flatMap<SearchResult>((material) => {
     const titleHit = normalizeText(material.title).includes(normalized);
     const bodyHit = normalizeText(material.plainText).includes(normalized);
     if (!titleHit && !bodyHit) return [];
@@ -24,41 +25,55 @@ export function searchAll(query: string, materials: Material[], topics: Topic[],
       id: material.id,
       module: "materials",
       title: material.title,
-      meta: material.status ? `${material.category} · ${material.status}` : material.category,
+      meta: material.status ? `文献综述 · ${material.status}` : "文献综述",
       snippet: makeSnippet(material.plainText, term),
       score: titleHit ? 100 : 50,
       needle: bodyHit ? term : undefined,
     }];
   });
 
-  const topicResults = topics.flatMap<SearchResult>((topic) => {
-    if (!normalizeText(topic.label).includes(normalized)) return [];
-    return [{
-      type: "topic",
-      id: topic.id,
-      module: "keywords",
-      title: topic.label,
-      meta: "关键词",
-      snippet: `${topic.mappings.length} 处已整理原文`,
-      score: 120,
-    }];
-  });
+  const focusSource = `${data.examFocus.title}${data.examFocus.notice}`;
+  const focusResults: SearchResult[] = normalizeText(focusSource).includes(normalized)
+    ? [{
+      type: "focus",
+      id: "",
+      module: "focus",
+      title: data.examFocus.title,
+      meta: "考前重点",
+      snippet: makeSnippet(focusSource, term),
+      score: 90,
+    }]
+    : [];
 
-  const termResults = terms.flatMap<SearchResult>((definition) => {
-    const text = `${definition.label}${definition.summary}${definition.sections.map((section) => `${section.heading}${section.key}${section.body}`).join("")}${definition.closing}`;
-    if (!normalizeText(text).includes(normalized)) return [];
+  const termResults = data.terms.flatMap<SearchResult>((definition) => {
+    const source = `${definition.label}${definition.universal}${definition.summary}${definition.points.join("")}`;
+    if (!normalizeText(source).includes(normalized)) return [];
     return [{
       type: "term",
       id: definition.id,
       module: "terms",
       title: definition.label,
       meta: "名词解释",
-      snippet: makeSnippet(text, term),
+      snippet: makeSnippet(source, term),
       score: normalizeText(definition.label).includes(normalized) ? 140 : 70,
     }];
   });
 
-  return [...termResults, ...topicResults, ...materialResults]
+  const templateResults = data.templates.flatMap<SearchResult>((template) => {
+    const source = `${template.label}${template.title}${template.question}${template.universal}${template.opening}${template.sections.map((section) => `${section.heading}${section.body.join("")}`).join("")}${template.closing}`;
+    if (!normalizeText(source).includes(normalized)) return [];
+    return [{
+      type: "template",
+      id: template.id,
+      module: "templates",
+      title: template.label,
+      meta: "答题模板",
+      snippet: makeSnippet(source, term),
+      score: normalizeText(`${template.label}${template.title}`).includes(normalized) ? 130 : 60,
+    }];
+  });
+
+  return [...focusResults, ...termResults, ...templateResults, ...materialResults]
     .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title, "zh-CN"))
     .slice(0, 24);
 }

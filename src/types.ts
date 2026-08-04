@@ -1,5 +1,4 @@
-export type ModuleId = "terms" | "materials" | "keywords" | "templates";
-export type StudyMode = "normal" | "super";
+export type ModuleId = "focus" | "materials" | "terms" | "templates" | "experience";
 
 export interface MaterialCatalogItem {
   id: string;
@@ -20,64 +19,50 @@ export interface Material extends MaterialCatalogItem {
   plainText: string;
 }
 
-export interface TopicMapping {
-  materialId: string;
-  needle: string;
-}
-
-export interface Topic {
+export interface OfficialEvidence {
   id: string;
-  label: string;
-  kind: "keyword";
-  mappings: TopicMapping[];
-}
-
-export interface ResolvedContext extends TopicMapping {
-  material: Material;
-  block: string;
+  materialId: string;
   heading: string;
-  targetBlock: string;
-}
-
-export interface AnswerCitation extends TopicMapping {
   quote: string;
 }
 
-export interface AnswerSection {
-  heading: string;
-  paragraphs: string[];
-  citations: AnswerCitation[];
+export interface ExamFocusData {
+  title: string;
+  notice: string;
+  evidence: OfficialEvidence[];
 }
 
-export interface AnswerMemory {
-  sequence: string[];
-  tip: string;
-}
-
-export interface AnswerExample {
-  id: string;
+export interface TermFact {
+  value: string;
   label: string;
-  question: string;
-  memory: AnswerMemory;
-  opening: string;
-  sections: AnswerSection[];
-  closing: string;
-}
-
-export interface TermSection {
-  number: string;
-  heading: string;
-  key: string;
-  body: string;
+  asOf: string;
 }
 
 export interface TermDefinition {
   id: string;
   label: string;
+  universal: string;
   summary: string;
-  sections: TermSection[];
+  points: string[];
+  evidenceIds: string[];
+  facts?: TermFact[];
+}
+
+export interface AnswerSection {
+  heading: string;
+  body: string[];
+  evidenceIds: string[];
+}
+
+export interface AnswerTemplate {
+  id: string;
+  label: string;
+  title: string;
+  question: string;
+  universal: string;
+  opening: string;
+  sections: AnswerSection[];
   closing: string;
-  sourceTopicId: string;
 }
 
 export interface Route {
@@ -87,7 +72,7 @@ export interface Route {
 }
 
 export interface SearchResult {
-  type: "material" | "topic" | "term";
+  type: "material" | "focus" | "term" | "template";
   id: string;
   module: ModuleId;
   title: string;
