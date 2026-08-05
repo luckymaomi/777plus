@@ -6,6 +6,7 @@ import { serializeEmbeddedAppData } from "../src/data";
 import { parseRoute, routeHref } from "../src/core/routes";
 import { searchAll } from "../src/core/search";
 import { normalizeText, stripFrontmatter, stripMarkdown } from "../src/core/text";
+import { resolveTheme, THEME_STORAGE_KEY } from "../src/core/theme";
 import type {
   AnswerTemplate,
   EssentialsData,
@@ -31,7 +32,7 @@ const examFocus = JSON.parse(readFileSync(resolve(content, "exam-focus.json"), "
 const terms = JSON.parse(readFileSync(resolve(content, "terms.json"), "utf8")) as TermDefinition[];
 const templates = JSON.parse(readFileSync(resolve(content, "templates.json"), "utf8")) as AnswerTemplate[];
 const experienceNotes = JSON.parse(readFileSync(resolve(content, "experience-notes.json"), "utf8")) as ExperienceNotesData;
-const externalEvidenceSources = new Set(["safety-production-law-2021"]);
+const externalEvidenceSources = new Set(["safety-production-law-current"]);
 const materials: Material[] = catalog.map((item) => {
   const markdown = readFileSync(resolve(content, item.path), "utf8");
   const body = stripFrontmatter(markdown);
@@ -99,7 +100,7 @@ describe("材料与考试通告", () => {
           : [`${evidence.id}: 笔记引文无法核对`];
       }
       if (!material && externalEvidenceSources.has(evidence.materialId)) {
-        return evidence.sourceLabel === "《中华人民共和国安全生产法》（2021年修正版）"
+        return evidence.sourceLabel === "《中华人民共和国安全生产法》（现行有效文本，最后修改于2021年）"
           ? []
           : [`${evidence.id}: 外部材料来源标识缺失`];
       }
@@ -294,7 +295,7 @@ describe("名词解释与答题模板", () => {
 
     [threeMusts, allStaff, responsiblePerson, employee].forEach((term) => {
       const html = renderTermsView(term, examFocus, materials);
-      expect(html).toContain("《中华人民共和国安全生产法》（2021年修正版）");
+      expect(html).toContain("《中华人民共和国安全生产法》（现行有效文本，最后修改于2021年）");
     });
   });
 
@@ -485,10 +486,11 @@ describe("路由、搜索与模块边界", () => {
     expect(indexHtml).not.toMatch(/[（(](?:官方|民间)[）)]/);
   });
 
-  it("品牌区只有图标且不提供主题切换和外部代码托管入口", () => {
+  it("品牌区只有图标并提供纯图标主题切换", () => {
     expect(indexHtml).toContain('<a class="brand" href="#/focus"');
     expect(indexHtml).not.toContain("brand-edition");
-    expect(indexHtml).not.toContain('id="themeToggle"');
+    expect(indexHtml).toContain('id="themeToggle"');
+    expect(indexHtml).toContain('aria-label="切换至夜间模式"');
     expect(indexHtml).not.toMatch(/href="https?:/i);
   });
 });
@@ -504,15 +506,18 @@ describe("样式与离线版", () => {
     expect(css).not.toMatch(/::(?:before|after)/i);
   });
 
-  it("页面只保留白底深色字的浅色主题", () => {
+  it("页面默认使用浅色主题并提供可持久化的夜间主题", () => {
     const styles = readdirSync(resolve(root, "src/styles"))
       .filter((name) => name.endsWith(".css"))
       .map((name) => readFileSync(resolve(root, "src/styles", name), "utf8"))
       .join("\n");
-    expect(styles).not.toContain('data-theme="dark"');
-    expect(styles).not.toMatch(/color-scheme:\s*dark/i);
-    expect(styles).not.toMatch(/background:\s*#17191d/i);
+    expect(styles).toContain(':root[data-theme="dark"]');
+    expect(styles).toMatch(/color-scheme:\s*dark/i);
     expect(indexHtml).toContain('<meta name="theme-color" content="#ffffff">');
+    expect(indexHtml).toContain(THEME_STORAGE_KEY);
+    expect(resolveTheme("dark")).toBe("dark");
+    expect(resolveTheme("light")).toBe("light");
+    expect(resolveTheme(null)).toBe("light");
   });
 
   it("应用页面不包含外部代码托管标识或链接", () => {

@@ -13,9 +13,12 @@ import "./styles/markdown.css";
 import "./styles/responsive.css";
 import { App } from "./app";
 import { loadAppData } from "./data";
+import { initializeTheme } from "./core/theme";
 
 const main = document.getElementById("appMain");
 if (!main) throw new Error("缺少应用入口");
+
+initializeTheme();
 
 loadAppData()
   .then((data) => new App(data, main))

@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="777plus 南货航备考资料库">
     <meta name="theme-color" content="#ffffff">
+    <script>
+      (() => {
+        let theme = "light";
+        try {
+          if (window.localStorage.getItem("777plus-theme") === "dark") theme = "dark";
+        } catch {}
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#121315" : "#ffffff");
+      })();
+    </script>
     <title>777plus</title>
   </head>
   <body>
@@ -26,6 +36,7 @@
           </div>
 
           <div class="header-actions">
+            <button class="icon-button" type="button" id="themeToggle" aria-label="切换至夜间模式" aria-pressed="false" title="切换至夜间模式"><i data-lucide="moon" aria-hidden="true"></i></button>
             <button class="icon-button export-button" type="button" id="exportHtml" aria-label="下载"><i data-lucide="download"></i></button>
             <button class="icon-button" type="button" id="guideOpen" aria-label="打开复习指引" title="复习指引"><i data-lucide="circle-help"></i></button>
           </div>

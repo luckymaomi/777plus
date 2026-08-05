@@ -14,10 +14,12 @@ import {
   ListChecks,
   LoaderCircle,
   Menu,
+  Moon,
   NotebookPen,
   PanelLeftOpen,
   Quote,
   Search,
+  Sun,
   Target,
   X,
 } from "lucide";
@@ -29,6 +31,7 @@ import { readStorage, removeStorage, writeStorage } from "./core/storage";
 import { prepareMarkdown } from "./core/markdown";
 import { writeClipboardText } from "./core/clipboard";
 import { escapeHtml } from "./core/text";
+import { toggleTheme } from "./core/theme";
 import { renderFocusNavigation, renderFocusView } from "./views/focus";
 import { renderMaterialsNavigation, renderMaterialsView } from "./views/materials";
 import { renderTermsNavigation, renderTermsView } from "./views/terms";
@@ -52,10 +55,12 @@ const iconSet = {
   ListChecks,
   LoaderCircle,
   Menu,
+  Moon,
   NotebookPen,
   PanelLeftOpen,
   Quote,
   Search,
+  Sun,
   Target,
   X,
 };
@@ -88,6 +93,10 @@ export class App {
     });
     document.getElementById("mobileMenu")?.addEventListener("click", () => this.openSidebar());
     document.getElementById("sidebarBackdrop")?.addEventListener("click", () => this.closeSidebar());
+    document.getElementById("themeToggle")?.addEventListener("click", () => {
+      toggleTheme();
+      createIcons({ icons: iconSet });
+    });
     bindOfflineExport(this.data, () => createIcons({ icons: iconSet }));
 
     const search = document.getElementById("globalSearch") as HTMLInputElement | null;
