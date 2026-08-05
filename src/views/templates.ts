@@ -7,9 +7,13 @@ export function buildAnswerText(template: AnswerTemplate, focus: ExamFocusData, 
     const evidence = resolveEvidence(section.evidenceIds, focus).map((item) => (
       `原文依据：${evidenceSource(item, materials)}\n“${item.quote}”`
     )).join("\n");
-    return `${index + 1}. ${section.heading}\n${section.body.join("\n\n")}${evidence ? `\n\n${evidence}` : ""}`;
+    const paragraphs = section.body.map((paragraph, paragraphIndex) => {
+      const anchor = paragraphIndex === 0 ? section.anchor : `${section.anchor} ${paragraphIndex + 1}`;
+      return `【${anchor}】${paragraph}`;
+    }).join("\n\n");
+    return `${index + 1}. ${section.heading}\n${paragraphs}${evidence ? `\n\n${evidence}` : ""}`;
   }).join("\n\n");
-  return `${template.question}\n\n大标题：${template.title}\n\n主观题通用表述：\n${template.universal}\n\n${template.opening}\n\n${sections}\n\n${template.closing}`;
+  return `${template.question}\n\n大标题：${template.title}\n\n【主观题通用表述】${template.universal}\n\n【${template.structureAnchor}】${template.opening}\n\n${sections}\n\n【结尾收束】${template.closing}`;
 }
 
 export function renderTemplatesNavigation(templates: AnswerTemplate[], selected: AnswerTemplate): string {
@@ -48,8 +52,7 @@ export function renderTemplatesView(selected: AnswerTemplate, focus: ExamFocusDa
       </header>
 
       <section class="content-section universal-statement answer-universal">
-        <div class="section-label">主观题通用表述</div>
-        <p>${escapeHtml(selected.universal)}</p>
+        <p><mark class="inline-anchor">主观题通用表述</mark>${escapeHtml(selected.universal)}</p>
       </section>
 
       <section class="answer-question">
@@ -64,13 +67,15 @@ export function renderTemplatesView(selected: AnswerTemplate, focus: ExamFocusDa
 
       <div class="answer-prose">
         <section class="answer-opening">
-          <div class="section-label">开头立论</div>
-          <p>${escapeHtml(selected.opening)}</p>
+          <p><mark class="inline-anchor">${escapeHtml(selected.structureAnchor)}</mark>${escapeHtml(selected.opening)}</p>
         </section>
         ${selected.sections.map((section, index) => `
           <section class="answer-section">
             <header><span>${String(index + 1).padStart(2, "0")}</span><h2>${escapeHtml(section.heading)}</h2></header>
-            ${section.body.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+            ${section.body.map((paragraph, paragraphIndex) => {
+              const anchor = paragraphIndex === 0 ? section.anchor : `${section.anchor} ${paragraphIndex + 1}`;
+              return `<p><mark class="inline-anchor">${escapeHtml(anchor)}</mark>${escapeHtml(paragraph)}</p>`;
+            }).join("")}
             ${section.evidenceIds.length ? `
               <div class="answer-evidence">
                 <div class="section-label">材料原文</div>
@@ -80,8 +85,7 @@ export function renderTemplatesView(selected: AnswerTemplate, focus: ExamFocusDa
           </section>
         `).join("")}
         <section class="answer-closing">
-          <div class="section-label">结尾收束</div>
-          <p>${escapeHtml(selected.closing)}</p>
+          <p><mark class="inline-anchor">结尾收束</mark>${escapeHtml(selected.closing)}</p>
         </section>
       </div>
     </article>

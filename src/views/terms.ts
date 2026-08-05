@@ -37,13 +37,11 @@ export function renderTermsView(selected: TermDefinition, focus: ExamFocusData, 
       </header>
 
       <section class="content-section universal-statement term-universal">
-        <div class="section-label">主观题通用表述</div>
-        <p>${escapeHtml(selected.universal)}</p>
+        <p><mark class="inline-anchor">主观题通用表述</mark>${escapeHtml(selected.universal)}</p>
       </section>
 
       <section class="content-section term-definition">
-        <div class="section-label">名词解释</div>
-        <p>${escapeHtml(selected.summary)}</p>
+        <p><mark class="inline-anchor">名词解释</mark>${escapeHtml(selected.summary)}</p>
       </section>
 
       ${selected.facts?.length ? `

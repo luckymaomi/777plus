@@ -10,6 +10,7 @@ import type {
   AnswerTemplate,
   EssentialsData,
   ExamFocusData,
+  ExperienceNotesData,
   Material,
   MaterialCatalogItem,
   TermDefinition,
@@ -29,6 +30,7 @@ const essentials = JSON.parse(readFileSync(resolve(content, "essentials.json"), 
 const examFocus = JSON.parse(readFileSync(resolve(content, "exam-focus.json"), "utf8")) as ExamFocusData;
 const terms = JSON.parse(readFileSync(resolve(content, "terms.json"), "utf8")) as TermDefinition[];
 const templates = JSON.parse(readFileSync(resolve(content, "templates.json"), "utf8")) as AnswerTemplate[];
+const experienceNotes = JSON.parse(readFileSync(resolve(content, "experience-notes.json"), "utf8")) as ExperienceNotesData;
 const materials: Material[] = catalog.map((item) => {
   const markdown = readFileSync(resolve(content, item.path), "utf8");
   const body = stripFrontmatter(markdown);
@@ -40,18 +42,25 @@ const data: AppData = {
   examFocus,
   terms,
   templates,
+  experienceNotes,
   experienceImage: "data:image/jpeg;base64,bWVuZw==",
 };
 
-describe("材料与考前重点", () => {
-  it("目录只保留当前11份文献并使用新版年中运行报告", () => {
-    expect(catalog).toHaveLength(11);
+describe("材料与考试通告", () => {
+  it("目录只保留当前7份文献并使用新版年中运行报告", () => {
+    expect(catalog).toHaveLength(7);
     expect(catalog).toContainEqual(expect.objectContaining({
       id: "midyear-operations-report-2026",
       source: "南货航2026年中运行工作报告V3.docx",
       sha256: "49e02aa3e1388a3d9eb019325d047491547b315c1e01ae9e0665a295ae8fb939",
     }));
     expect(catalog.some((item) => item.id === "flight-team-midyear-report-2026")).toBe(false);
+    [
+      "four-explanations-group-logistics-2026",
+      "ccar-398r1-2026",
+      "four-explanations-notice-2026",
+      "logistics-reform",
+    ].forEach((id) => expect(catalog.some((item) => item.id === id)).toBe(false));
     expect(catalog.some((item) => item.id.includes("2024"))).toBe(false);
     expect(catalog.filter((item) => item.id.includes("2025")).every((item) => item.status === "旧材料")).toBe(true);
   });
@@ -62,8 +71,16 @@ describe("材料与考前重点", () => {
 
   it("每条材料引文都能在指定材料中核对", () => {
     const materialMap = new Map(materials.map((material) => [material.id, material]));
+    const noteSource = experienceNotes.sections.flatMap((section) => (
+      section.entries.flatMap((entry) => [entry.heading, ...entry.paragraphs])
+    )).join("");
     const errors = examFocus.evidence.flatMap((evidence) => {
       const material = materialMap.get(evidence.materialId);
+      if (!material && evidence.materialId === experienceNotes.id) {
+        return normalizeText(noteSource).includes(normalizeText(evidence.quote))
+          ? []
+          : [`${evidence.id}: 笔记引文无法核对`];
+      }
       if (!material) return [`${evidence.id}: 缺少材料 ${evidence.materialId}`];
       return normalizeText(material.plainText).includes(normalizeText(evidence.quote))
         ? []
@@ -82,7 +99,7 @@ describe("材料与考前重点", () => {
     expect(references.filter((id) => !evidenceIds.has(id))).toEqual([]);
   });
 
-  it("考前重点只输出通告正文", () => {
+  it("考试通告只输出通告正文", () => {
     const html = renderFocusView(examFocus);
     expect(html).toContain(examFocus.notice);
     expect(html).toContain("考试范围通告");
@@ -122,13 +139,41 @@ describe("没招了，就只看这一个", () => {
       { value: "不低于87%", label: "航班正常率目标", asOf: "2026年下半年工作目标" },
     ]));
   });
+
+  it("关键词按考试通告六项范围展开对应下级词语", () => {
+    expect(essentials.keywordGroups.map((group) => group.label)).toEqual([
+      "民航安全生产基础知识",
+      "公司战略（南航集团、物流公司、南货航）",
+      "发展情况",
+      "企业文化",
+      "发展规划",
+      "南货航安全运行的基本情况",
+    ]);
+    const strategy = essentials.keywordGroups[1];
+    expect(strategy?.keywords).toEqual(expect.arrayContaining([
+      "南航集团：五五六六",
+      "物流公司：一三一四",
+      "南货航：全球飞 飞全球",
+      "南货航：建设世界一流航空货运承运人",
+    ]));
+    expect(strategy?.keywords.join(" ")).toContain("安全发展、高质量发展、创新发展、合作发展、共享发展");
+    expect(strategy?.keywords.join(" ")).toContain("由粗放型管理向精细化管理转变");
+    expect(essentials.keywordGroups[3]?.keywords).toContain("经营理念：为客户创造价值");
+    expect(essentials.keywordGroups[3]?.keywords).toContain("品牌口号：飞向美好未来");
+    expect(essentials.keywordGroups[5]?.keywords).toContain("一线一策、一场一策");
+    expect(essentials.keywordGroups[0]?.keywords).toContain("SMS四大支柱：安全政策与目标、安全风险管理、安全保证、安全促进");
+    expect(essentials.keywordGroups[0]?.keywords).toContain("南航安全七大体系：规章手册体系、安全责任体系、风险管控体系、过程控制体系、训练培训体系、科技创新体系、安全文化体系");
+  });
 });
 
 describe("名词解释与答题模板", () => {
-  it("名词解释包含考试范围六项、一三一四和七场硬仗", () => {
+  it("名词解释包含考试范围六项及五个专项名词", () => {
     expect(terms.map((term) => term.id)).toEqual([
       "safety-basics",
+      "sms-four-pillars",
+      "csair-seven-safety-systems",
       "company-strategy",
+      "five-five-six-six",
       "one-three-one-four",
       "seven-battles",
       "development-status",
@@ -143,7 +188,8 @@ describe("名词解释与答题模板", () => {
     expect(html).toContain("材料原文");
     expect(html).not.toContain("#/materials/");
     expect(html).not.toContain("#/keywords/");
-    expect(renderTermsNavigation(terms, terms[0] as TermDefinition)).toContain("8 个名词");
+    expect(renderTermsNavigation(terms, terms[0] as TermDefinition)).toContain("11 个名词");
+    expect(indexHtml).toContain("掌握十一个名词及其必记要点");
   });
 
   it("每个名词在解释前提供包含该名词的通用表述", () => {
@@ -154,6 +200,38 @@ describe("名词解释与答题模板", () => {
       expect(html).toContain(term.universal);
       expect(html.indexOf("term-universal")).toBeLessThan(html.indexOf("term-definition"));
     });
+  });
+
+  it("五五六六保留通用表述并按原文展示完整构成", () => {
+    const strategy = terms.find((term) => term.id === "five-five-six-six") as TermDefinition;
+    expect(strategy.universal).toContain("五五六六");
+    expect(strategy.summary).toBe("坚持五大发展、实施五大战略、推进六大行动、实现六大转变。");
+    expect(strategy.points).toHaveLength(4);
+    expect(strategy.points[0]).toBe("五大发展：安全发展、高质量发展、创新发展、合作发展、共享发展。");
+    expect(strategy.points[1]).toBe("五大战略：枢纽网络战略、创新驱动战略、生态圈战略、精益管控战略、品牌经营战略。");
+    expect(strategy.points[2]).toContain("全面打造“五化”服务行动");
+    expect(strategy.points[3]).toContain("由粗放型管理向精细化管理转变");
+    const html = renderTermsView(strategy, examFocus, materials);
+    expect(html).toContain("主观题通用表述");
+    expect(html).toContain(strategy.universal);
+  });
+
+  it("SMS四大支柱和南航安全七大体系逐项完整", () => {
+    const sms = terms.find((term) => term.id === "sms-four-pillars") as TermDefinition;
+    const systems = terms.find((term) => term.id === "csair-seven-safety-systems") as TermDefinition;
+    expect(sms.summary).toBe("SMS四大支柱是安全政策与目标、安全风险管理、安全保证、安全促进。");
+    expect(sms.points).toEqual(["安全政策与目标。", "安全风险管理。", "安全保证。", "安全促进。"]);
+    expect(systems.points).toEqual([
+      "规章手册体系。",
+      "安全责任体系。",
+      "风险管控体系。",
+      "过程控制体系。",
+      "训练培训体系。",
+      "科技创新体系。",
+      "安全文化体系。",
+    ]);
+    expect(renderTermsView(sms, examFocus, materials)).toContain("帆姐《考点梳理2025》 · 2025笔记");
+    expect(renderTermsView(systems, examFocus, materials)).toContain("2026年纵深推进安全七大体系建设");
   });
 
   it("一三一四和七场硬仗保留完整构成", () => {
@@ -204,6 +282,8 @@ describe("名词解释与答题模板", () => {
       "第四部分：回到岗位，写出个人可执行动作",
     ]);
     expect(templates.every((template) => template.universal.length > 100)).toBe(true);
+    expect(templates.every((template) => template.structureAnchor.length > 0)).toBe(true);
+    expect(templates.every((template) => template.sections.every((section) => section.anchor.length > 0))).toBe(true);
   });
 
   it("模板具备大标题、小标题、正文、材料原文和复制文本", () => {
@@ -214,26 +294,39 @@ describe("名词解释与答题模板", () => {
     expect(html).toContain("材料原文");
     expect(html).toContain("主观题通用表述");
     expect(html).toContain(template.universal);
+    expect(html).toContain('<mark class="inline-anchor">主观题通用表述</mark>');
+    expect(html).toContain(`<mark class="inline-anchor">${template.structureAnchor}</mark>`);
+    expect(html).toContain(`<mark class="inline-anchor">${template.sections[0]?.anchor}</mark>`);
+    expect(html).not.toContain("结构总览");
+    expect(html).not.toContain("结构路径");
     expect(html).not.toContain("适用范围");
     expect(html).not.toContain("#/materials/");
     expect(answer).toContain(`大标题：${template.title}`);
-    expect(answer).toContain(`主观题通用表述：\n${template.universal}`);
+    expect(answer).toContain(`【主观题通用表述】${template.universal}`);
+    expect(answer).toContain(`【${template.structureAnchor}】${template.opening}`);
+    expect(answer).toContain(`【${template.sections[0]?.anchor}】`);
     expect(answer).toContain("原文依据：《南货航2026年中运行工作报告》");
     expect(answer).not.toContain("适用范围");
   });
 
-  it("大神经验展示孟哥笔记图片", () => {
+  it("大神经验单页展示帆姐文字笔记和孟哥原图", () => {
     const imagePath = resolve(content, "assets/meng-key-points.jpg");
     expect(existsSync(imagePath)).toBe(true);
-    const html = renderExperienceView("data:image/jpeg;base64,bWVuZw==");
+    const html = renderExperienceView("data:image/jpeg;base64,bWVuZw==", experienceNotes);
+    expect(html).toContain("帆姐考点梳理");
     expect(html).toContain("孟哥的笔记");
+    expect(html).toContain("仍有效");
+    expect(html).toContain("2025口径");
+    expect(html).toContain("已过时");
+    expect(html).toContain("<s>安全生产专项整治");
+    expect(html).toContain("安全政策与目标、安全风险管理、安全保证、安全促进");
     expect(html).toContain("data:image/jpeg;base64,bWVuZw==");
     expect(html).not.toContain("原样展示");
   });
 });
 
 describe("路由、搜索与模块边界", () => {
-  it("默认进入考前重点，旧路由不再成立", () => {
+  it("默认进入考试通告，旧路由不再成立", () => {
     expect(parseRoute("")).toEqual({ module: "focus" });
     expect(parseRoute("#/keywords/safety")).toEqual({ module: "focus" });
     expect(parseRoute("#/super")).toEqual({ module: "focus" });
@@ -249,10 +342,10 @@ describe("路由、搜索与模块边界", () => {
     expect(searchAll("主观题客观题", data)).toEqual(expect.arrayContaining([
       expect.objectContaining({ type: "focus", module: "focus" }),
     ]));
-    expect(searchAll("民航生产经营单位", data)).toEqual(expect.arrayContaining([
+    expect(searchAll("R8补充合格审定", data)).toEqual(expect.arrayContaining([
       expect.objectContaining({ type: "material", module: "materials" }),
     ]));
-    expect(searchAll("民航生产经营单位", data)).not.toEqual(expect.arrayContaining([
+    expect(searchAll("R8补充合格审定", data)).not.toEqual(expect.arrayContaining([
       expect.objectContaining({ type: "focus", module: "focus" }),
     ]));
     expect(searchAll("公司战略", data)).toEqual(expect.arrayContaining([
@@ -270,6 +363,12 @@ describe("路由、搜索与模块边界", () => {
     expect(searchAll("15.72小时", data)).toEqual(expect.arrayContaining([
       expect.objectContaining({ type: "essential", module: "essentials", id: "numbers" }),
     ]));
+    expect(searchAll("由粗放型管理向精细化管理转变", data)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ type: "essential", module: "essentials", id: "keywords" }),
+    ]));
+    expect(searchAll("一图一册一平台", data)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ type: "experience", module: "experience" }),
+    ]));
   });
 
   it("文献目录没有分类筛选", () => {
@@ -280,7 +379,7 @@ describe("路由、搜索与模块边界", () => {
   });
 
   it("主导航只保留当前六个模块并保持指定顺序", () => {
-    const links = ["essentials", "focus", "materials", "terms", "templates", "experience"]
+    const links = ["focus", "materials", "terms", "templates", "experience", "essentials"]
       .map((module) => indexHtml.indexOf(`data-module-link="${module}"`));
     expect(links.every((index) => index >= 0)).toBe(true);
     expect(links).toEqual([...links].sort((left, right) => left - right));
@@ -363,17 +462,32 @@ describe("样式与离线版", () => {
     ].forEach((path) => expect(existsSync(resolve(root, path))).toBe(false));
   });
 
-  it("安全内嵌同一应用所需的全部数据和笔记图片", () => {
+  it("四份排除材料及其原始素材已经删除", () => {
+    [
+      "content/materials/four-explanations-group-logistics-2026.md",
+      "content/materials/ccar-398r1-2026.md",
+      "content/materials/four-explanations-notice-2026.md",
+      "content/materials/logistics-reform.md",
+      "考试素材合集/2026年“四个讲明”形势任务教育宣讲提纲（含集团和物流公司）.pptx",
+      "考试素材合集/CCAR-398R1规章宣贯 202606V2.pdf",
+      "考试素材合集/关于印发《2026年“四个讲明”形势任务教育宣讲提纲》的通知.pdf",
+      "考试素材合集/南航物流改革发展.pptx",
+    ].forEach((path) => expect(existsSync(resolve(root, path))).toBe(false));
+  });
+
+  it("安全内嵌同一应用所需的全部数据、文字笔记和图片", () => {
     const serialized = serializeEmbeddedAppData({
       ...data,
       materials: [{ ...(materials[0] as Material), body: "原文 </script> 仍需保留" }, ...materials.slice(1)],
     });
     const restored = JSON.parse(serialized) as AppData;
-    expect(restored.materials).toHaveLength(11);
+    expect(restored.materials).toHaveLength(7);
     expect(restored.essentials.knowledge).toHaveLength(8);
     expect(restored.essentials.answerSteps).toHaveLength(5);
-    expect(restored.terms).toHaveLength(8);
+    expect(restored.terms).toHaveLength(11);
     expect(restored.templates).toHaveLength(6);
+    expect(restored.experienceNotes.id).toBe("fan-key-points-2025");
+    expect(restored.experienceNotes.sections).toHaveLength(10);
     expect(restored.experienceImage).toMatch(/^data:image\/jpeg;base64,/);
     expect(serialized).not.toContain("</script>");
   });

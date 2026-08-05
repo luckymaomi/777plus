@@ -1,0 +1,142 @@
+.experience-nav-item {
+  margin-top: 6px;
+}
+
+.fan-notes,
+.meng-notes {
+  min-width: 0;
+}
+
+.meng-notes {
+  margin-top: 72px;
+}
+
+.experience-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+}
+
+.experience-section-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 730;
+  line-height: 1.4;
+}
+
+.experience-section-header p {
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.note-legend {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.note-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--success) 38%, var(--line));
+  border-radius: 4px;
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.note-status.is-outdated,
+.fan-note-entry.is-outdated .note-status {
+  border-color: var(--line-strong);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.note-status.is-legacy,
+.fan-note-entry.is-legacy .note-status {
+  border-color: color-mix(in srgb, var(--notice) 38%, var(--line));
+  background: var(--notice-soft);
+  color: var(--notice);
+}
+
+.fan-note-sections {
+  display: grid;
+  gap: 54px;
+}
+
+.fan-note-section > h2 {
+  margin: 0 0 20px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 710;
+  line-height: 1.5;
+}
+
+.fan-note-entries {
+  display: grid;
+  gap: 26px;
+}
+
+.fan-note-entry > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.fan-note-entry h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 690;
+  line-height: 1.55;
+}
+
+.fan-note-entry p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+.fan-note-entry p + p {
+  margin-top: 10px;
+}
+
+.fan-note-entry.is-outdated h3,
+.fan-note-entry.is-outdated p {
+  color: var(--text-muted);
+}
+
+.fan-note-entry s {
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+}
+
+@media (max-width: 620px) {
+  .experience-section-header,
+  .fan-note-entry > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .note-legend {
+    flex-wrap: wrap;
+  }
+
+  .fan-note-sections {
+    gap: 44px;
+  }
+}

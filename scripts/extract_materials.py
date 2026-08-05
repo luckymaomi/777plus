@@ -34,29 +34,17 @@ MATERIALS = (
         "形势任务",
     ),
     Material(
-        '2026年“四个讲明”形势任务教育宣讲提纲（含集团和物流公司）.pptx',
-        "four-explanations-group-logistics-2026",
-        "形势任务",
-    ),
-    Material(
         "2026年南货航飞行队伍建设工作汇报材料暨飞行部年中工作报告 V3（无高亮，带批注）.doc",
         "flight-team-midyear-report-2026",
         "工作报告",
     ),
-    Material("CCAR-398R1规章宣贯 202606V2.pdf", "ccar-398r1-2026", "安全规章"),
     Material("kaoti.doc", "exam-reference", "考试参考"),
-    Material(
-        '关于印发《2026年“四个讲明”形势任务教育宣讲提纲》的通知.pdf',
-        "four-explanations-notice-2026",
-        "形势任务",
-    ),
     Material(
         "关于印发南航高质量发展总体思路（2025年版）的通知.pdf",
         "high-quality-development-2025",
         "战略发展",
         "旧材料",
     ),
-    Material("南航物流改革发展.pptx", "logistics-reform", "改革发展"),
     Material("南货航2026年工作报告.docx", "cargo-report-2026", "工作报告"),
     Material(
         "南货航飞行部2025年工作报告 V7（终稿）.docx",

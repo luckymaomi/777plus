@@ -62,7 +62,7 @@ const iconSet = {
 
 const moduleNames: Record<ModuleId, string> = {
   essentials: "没招了，就只看这一个",
-  focus: "考前重点",
+  focus: "考试通告",
   materials: "文献综述",
   terms: "名词解释",
   templates: "答题模板",
@@ -175,8 +175,8 @@ export class App {
   }
 
   private renderExperience(): void {
-    this.setNavigation(renderExperienceNavigation());
-    this.main.innerHTML = renderExperienceView(this.data.experienceImage);
+    this.setNavigation(renderExperienceNavigation(this.data.experienceNotes));
+    this.main.innerHTML = renderExperienceView(this.data.experienceImage, this.data.experienceNotes);
     this.bindWorkspaceControls();
     window.scrollTo({ top: 0 });
   }
@@ -241,6 +241,7 @@ export class App {
       focus: "target",
       term: "book-marked",
       template: "notebook-pen",
+      experience: "file-text",
     }[result.type];
     return `<a class="search-result" href="${href}"><i data-lucide="${icon}"></i><span><b>${escapeHtml(result.title)}</b><small>${escapeHtml(result.meta)} · ${escapeHtml(result.snippet)}</small></span><i data-lucide="arrow-up-right"></i></a>`;
   }

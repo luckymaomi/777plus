@@ -15,7 +15,7 @@ export function evidenceSource(evidence: OfficialEvidence, materials: Material[]
 
 function evidenceMaterial(evidence: OfficialEvidence, materials: Material[]): string {
   const material = materials.find((item) => item.id === evidence.materialId);
-  if (!material) return evidence.materialId;
+  if (!material) return evidence.sourceLabel ?? evidence.materialId;
   return `《${material.title}》${material.status ? ` · ${material.status}` : ""}`;
 }
 

@@ -109,16 +109,26 @@
   height: 15px;
 }
 
+.inline-anchor {
+  display: inline-block;
+  margin: 0 7px 1px 0;
+  padding: 1px 6px;
+  border: 1px solid var(--highlight-line);
+  border-radius: 4px;
+  background: var(--highlight);
+  color: var(--highlight-text);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.55;
+  vertical-align: 0.08em;
+}
+
 .universal-statement {
   margin-bottom: 30px;
   padding: 20px 22px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface-muted);
-}
-
-.universal-statement > .section-label {
-  margin-bottom: 12px;
 }
 
 .universal-statement p {

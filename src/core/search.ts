@@ -39,7 +39,7 @@ export function searchAll(query: string, data: AppData): SearchResult[] {
       id: "",
       module: "focus",
       title: data.examFocus.title,
-      meta: "考前重点",
+      meta: "考试通告",
       snippet: makeSnippet(focusSource, term),
       score: 90,
     }]
@@ -101,7 +101,7 @@ export function searchAll(query: string, data: AppData): SearchResult[] {
   });
 
   const templateResults = data.templates.flatMap<SearchResult>((template) => {
-    const source = `${template.label}${template.title}${template.question}${template.universal}${template.opening}${template.sections.map((section) => `${section.heading}${section.body.join("")}`).join("")}${template.closing}`;
+    const source = `${template.label}${template.title}${template.question}${template.universal}${template.structureAnchor}${template.opening}${template.sections.map((section) => `${section.anchor}${section.heading}${section.body.join("")}`).join("")}${template.closing}`;
     if (!normalizeText(source).includes(normalized)) return [];
     return [{
       type: "template",
@@ -114,7 +114,22 @@ export function searchAll(query: string, data: AppData): SearchResult[] {
     }];
   });
 
-  return [...essentialResults, ...focusResults, ...termResults, ...templateResults, ...materialResults]
+  const experienceSource = data.experienceNotes.sections.map((section) => (
+    `${section.title}${section.entries.map((entry) => `${entry.heading}${entry.paragraphs.join("")}`).join("")}`
+  )).join("");
+  const experienceResults: SearchResult[] = normalizeText(`${data.experienceNotes.title}${experienceSource}`).includes(normalized)
+    ? [{
+      type: "experience",
+      id: "",
+      module: "experience",
+      title: data.experienceNotes.title,
+      meta: "大神经验",
+      snippet: makeSnippet(experienceSource, term),
+      score: normalizeText(data.experienceNotes.title).includes(normalized) ? 120 : 65,
+    }]
+    : [];
+
+  return [...essentialResults, ...focusResults, ...termResults, ...templateResults, ...experienceResults, ...materialResults]
     .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title, "zh-CN"))
     .slice(0, 24);
 }

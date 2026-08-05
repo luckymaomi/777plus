@@ -11,17 +11,6 @@
     "lines": 139
   },
   {
-    "id": "four-explanations-group-logistics-2026",
-    "title": "2026年“四个讲明”形势任务教育宣讲提纲（含集团和物流公司）",
-    "source": "2026年“四个讲明”形势任务教育宣讲提纲（含集团和物流公司）.pptx",
-    "category": "形势任务",
-    "format": "pptx",
-    "path": "materials/four-explanations-group-logistics-2026.md",
-    "sha256": "4276d254d2b7a48c843be6658f20b7473372aa0311b7c48c5bf7d734dfa6d0f4",
-    "characters": 6042,
-    "lines": 618
-  },
-  {
     "id": "midyear-operations-report-2026",
     "title": "南货航2026年中运行工作报告",
     "source": "南货航2026年中运行工作报告V3.docx",
@@ -31,17 +20,6 @@
     "sha256": "49e02aa3e1388a3d9eb019325d047491547b315c1e01ae9e0665a295ae8fb939",
     "characters": 5547,
     "lines": 105
-  },
-  {
-    "id": "ccar-398r1-2026",
-    "title": "CCAR-398R1规章宣贯 202606V2",
-    "source": "CCAR-398R1规章宣贯 202606V2.pdf",
-    "category": "安全规章",
-    "format": "pdf",
-    "path": "materials/ccar-398r1-2026.md",
-    "sha256": "f7b39dc4666527f787cd4264076e2d99d6a1b3e811087231903ff8efb7c5216e",
-    "characters": 4958,
-    "lines": 195
   },
   {
     "id": "exam-reference",
@@ -55,17 +33,6 @@
     "lines": 9
   },
   {
-    "id": "four-explanations-notice-2026",
-    "title": "关于印发《2026年“四个讲明”形势任务教育宣讲提纲》的通知",
-    "source": "关于印发《2026年“四个讲明”形势任务教育宣讲提纲》的通知.pdf",
-    "category": "形势任务",
-    "format": "pdf",
-    "path": "materials/four-explanations-notice-2026.md",
-    "sha256": "d3647ce591aea03b051bff06e17db4d3f8f104812d7436bf9e96788ef490dcbe",
-    "characters": 14151,
-    "lines": 593
-  },
-  {
     "id": "high-quality-development-2025",
     "title": "关于印发南航高质量发展总体思路（2025年版）的通知",
     "source": "关于印发南航高质量发展总体思路（2025年版）的通知.pdf",
@@ -76,17 +43,6 @@
     "sha256": "f9d7705be06da79c8f15fb378764427bf87524861a1b5d898ca08247b3f0a322",
     "characters": 7023,
     "lines": 123
-  },
-  {
-    "id": "logistics-reform",
-    "title": "南航物流改革发展",
-    "source": "南航物流改革发展.pptx",
-    "category": "改革发展",
-    "format": "pptx",
-    "path": "materials/logistics-reform.md",
-    "sha256": "8e215a84a7c2f31d7ede3d0a4479974e4d36e37d76c9209e2b64276bada33dcf",
-    "characters": 4360,
-    "lines": 436
   },
   {
     "id": "cargo-report-2026",

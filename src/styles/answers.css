@@ -41,11 +41,6 @@
   min-width: 0;
 }
 
-.answer-opening > .section-label,
-.answer-closing > .section-label {
-  margin-bottom: 12px;
-}
-
 .answer-opening p,
 .answer-closing p,
 .answer-section > p {

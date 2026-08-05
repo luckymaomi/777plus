@@ -22,6 +22,7 @@ export interface Material extends MaterialCatalogItem {
 export interface OfficialEvidence {
   id: string;
   materialId: string;
+  sourceLabel?: string;
   heading: string;
   quote: string;
 }
@@ -49,6 +50,7 @@ export interface TermDefinition {
 }
 
 export interface AnswerSection {
+  anchor: string;
   heading: string;
   body: string[];
   evidenceIds: string[];
@@ -60,6 +62,7 @@ export interface AnswerTemplate {
   title: string;
   question: string;
   universal: string;
+  structureAnchor: string;
   opening: string;
   sections: AnswerSection[];
   closing: string;
@@ -103,6 +106,29 @@ export interface EssentialsData {
   phrases: EssentialPhrase[];
 }
 
+export type ExperienceNoteStatus = "current" | "outdated" | "legacy";
+
+export interface ExperienceNoteEntry {
+  heading: string;
+  status: ExperienceNoteStatus;
+  paragraphs: string[];
+}
+
+export interface ExperienceNoteSection {
+  id: string;
+  title: string;
+  entries: ExperienceNoteEntry[];
+}
+
+export interface ExperienceNotesData {
+  id: string;
+  title: string;
+  source: string;
+  asOf: string;
+  sha256: string;
+  sections: ExperienceNoteSection[];
+}
+
 export interface Route {
   module: ModuleId;
   itemId?: string;
@@ -110,7 +136,7 @@ export interface Route {
 }
 
 export interface SearchResult {
-  type: "material" | "essential" | "focus" | "term" | "template";
+  type: "material" | "essential" | "focus" | "term" | "template" | "experience";
   id: string;
   module: ModuleId;
   title: string;
