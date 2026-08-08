@@ -90,6 +90,32 @@ describe("数据结构", () => {
     ];
     expect(references.every((id) => evidenceIds.has(id))).toBe(true);
   });
+
+  it("答题模板包含五道参考题并保持大标题和小标题结构", () => {
+    const expectedTopics = new Map([
+      ["internal-control-penetration", "穿透"],
+      ["functional-management-effectiveness", "半截式"],
+      ["performance-formalism", "形式主义"],
+      ["strategy-empowering-organization", "赋能型组织"],
+      ["ai-big-data-aviation", "人工智能和大数据"],
+    ]);
+    const referenceTemplates = templates.filter((template) => expectedTopics.has(template.id));
+
+    expect(templates).toHaveLength(12);
+    expect(referenceTemplates).toHaveLength(expectedTopics.size);
+    referenceTemplates.forEach((template) => {
+      const source = `${template.label}${template.title}${template.question}${template.universal}`;
+      expect(source).toContain(expectedTopics.get(template.id));
+      expect(template.title.trim().length).toBeGreaterThan(0);
+      expect(template.sections).toHaveLength(4);
+      expect(template.sections.every((section) => section.heading.trim().length > 0)).toBe(true);
+    });
+
+    const aiTemplate = templates.find((template) => template.id === "ai-big-data-aviation") as AnswerTemplate;
+    const aiArticleLength = `${aiTemplate.opening}${aiTemplate.sections.flatMap((section) => section.body).join("")}${aiTemplate.closing}`.length;
+    expect(aiArticleLength).toBeGreaterThanOrEqual(550);
+    expect(aiArticleLength).toBeLessThanOrEqual(750);
+  });
 });
 
 describe("页面结构", () => {
