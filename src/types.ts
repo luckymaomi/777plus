@@ -129,6 +129,21 @@ export interface ExperienceNotesData {
   sections: ExperienceNoteSection[];
 }
 
+export interface CuratedExperienceSection {
+  id: string;
+  title: string;
+  paragraphs: string[];
+}
+
+export interface CuratedExperienceNotesData {
+  id: string;
+  title: string;
+  source: string;
+  asOf: string;
+  sha256: string;
+  sections: CuratedExperienceSection[];
+}
+
 export interface Route {
   module: ModuleId;
   itemId?: string;

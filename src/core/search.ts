@@ -1,5 +1,6 @@
 import type { AppData } from "../data";
 import type { SearchResult } from "../types";
+import { MENG_NOTES_ID } from "./experience";
 import { normalizeText } from "./text";
 
 function makeSnippet(text: string, query: string): string {
@@ -114,20 +115,28 @@ export function searchAll(query: string, data: AppData): SearchResult[] {
     }];
   });
 
-  const experienceSource = data.experienceNotes.sections.map((section) => (
+  const fanExperienceSource = data.experienceNotes.sections.map((section) => (
     `${section.title}${section.entries.map((entry) => `${entry.heading}${entry.paragraphs.join("")}`).join("")}`
   )).join("");
-  const experienceResults: SearchResult[] = normalizeText(`${data.experienceNotes.title}${experienceSource}`).includes(normalized)
-    ? [{
+  const jingExperienceSource = data.jingNotes.sections.map((section) => (
+    `${section.title}${section.paragraphs.join("")}`
+  )).join("");
+  const experienceCollections = [
+    { id: data.jingNotes.id, title: data.jingNotes.title, source: jingExperienceSource },
+    { id: data.experienceNotes.id, title: data.experienceNotes.title, source: fanExperienceSource },
+    { id: MENG_NOTES_ID, title: "孟哥笔记", source: "孟哥重点整理原图" },
+  ];
+  const experienceResults = experienceCollections.flatMap<SearchResult>(({ id, title, source }) => (
+    normalizeText(`${title}${source}`).includes(normalized) ? [{
       type: "experience",
-      id: "",
+      id,
       module: "experience",
-      title: data.experienceNotes.title,
+      title,
       meta: "大神经验",
-      snippet: makeSnippet(experienceSource, term),
-      score: normalizeText(data.experienceNotes.title).includes(normalized) ? 120 : 65,
-    }]
-    : [];
+      snippet: makeSnippet(source, term),
+      score: normalizeText(title).includes(normalized) ? 120 : 65,
+    }] : []
+  ));
 
   return [...essentialResults, ...focusResults, ...termResults, ...templateResults, ...experienceResults, ...materialResults]
     .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title, "zh-CN"))

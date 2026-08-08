@@ -32,6 +32,7 @@ import { prepareMarkdown } from "./core/markdown";
 import { writeClipboardText } from "./core/clipboard";
 import { escapeHtml } from "./core/text";
 import { toggleTheme } from "./core/theme";
+import { resolveExperienceId } from "./core/experience";
 import { renderFocusNavigation, renderFocusView } from "./views/focus";
 import { renderMaterialsNavigation, renderMaterialsView } from "./views/materials";
 import { renderTermsNavigation, renderTermsView } from "./views/terms";
@@ -121,7 +122,7 @@ export class App {
     if (this.route.module === "materials") this.renderMaterials(this.route);
     if (this.route.module === "terms") this.renderTerms(this.route);
     if (this.route.module === "templates") this.renderTemplates(this.route);
-    if (this.route.module === "experience") this.renderExperience();
+    if (this.route.module === "experience") this.renderExperience(this.route);
     this.refreshShell();
     createIcons({ icons: iconSet });
   }
@@ -183,9 +184,15 @@ export class App {
     window.scrollTo({ top: 0 });
   }
 
-  private renderExperience(): void {
-    this.setNavigation(renderExperienceNavigation(this.data.experienceNotes));
-    this.main.innerHTML = renderExperienceView(this.data.experienceImage, this.data.experienceNotes);
+  private renderExperience(route: Route): void {
+    const selectedId = resolveExperienceId(route.itemId, this.data.jingNotes.id, this.data.experienceNotes.id);
+    this.setNavigation(renderExperienceNavigation(this.data.experienceNotes, this.data.jingNotes, selectedId));
+    this.main.innerHTML = renderExperienceView(
+      this.data.experienceImage,
+      this.data.experienceNotes,
+      this.data.jingNotes,
+      selectedId,
+    );
     this.bindWorkspaceControls();
     window.scrollTo({ top: 0 });
   }

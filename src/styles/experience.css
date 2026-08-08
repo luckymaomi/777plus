@@ -1,42 +1,14 @@
-.experience-nav-item {
-  margin-top: 6px;
-}
-
+.jing-notes,
 .fan-notes,
 .meng-notes {
   min-width: 0;
-}
-
-.meng-notes {
-  margin-top: 72px;
-}
-
-.experience-section-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  gap: 20px;
-}
-
-.experience-section-header h2 {
-  margin: 0;
-  color: var(--text);
-  font-size: 24px;
-  font-weight: 730;
-  line-height: 1.4;
-}
-
-.experience-section-header p {
-  margin: 7px 0 0;
-  color: var(--text-muted);
-  font-size: 12px;
 }
 
 .note-legend {
   display: flex;
   align-items: center;
   flex: 0 0 auto;
+  margin-bottom: 28px;
   gap: 6px;
 }
 
@@ -66,6 +38,37 @@
   border-color: color-mix(in srgb, var(--notice) 38%, var(--line));
   background: var(--notice-soft);
   color: var(--notice);
+}
+
+.jing-note-sections {
+  display: grid;
+  gap: 54px;
+}
+
+.jing-note-section > h2 {
+  margin: 0 0 20px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 710;
+  line-height: 1.5;
+}
+
+.jing-note-body {
+  display: grid;
+  gap: 10px;
+}
+
+.jing-note-body p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+.jing-note-body p:first-child {
+  color: var(--text);
+  font-weight: 650;
 }
 
 .fan-note-sections {
@@ -125,7 +128,6 @@
 }
 
 @media (max-width: 620px) {
-  .experience-section-header,
   .fan-note-entry > header {
     align-items: flex-start;
     flex-direction: column;
@@ -136,6 +138,7 @@
     flex-wrap: wrap;
   }
 
+  .jing-note-sections,
   .fan-note-sections {
     gap: 44px;
   }

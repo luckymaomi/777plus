@@ -1,5 +1,6 @@
 import type {
   AnswerTemplate,
+  CuratedExperienceNotesData,
   EssentialsData,
   ExamFocusData,
   ExperienceNotesData,
@@ -16,6 +17,7 @@ export interface AppData {
   terms: TermDefinition[];
   templates: AnswerTemplate[];
   experienceNotes: ExperienceNotesData;
+  jingNotes: CuratedExperienceNotesData;
   experienceImage: string;
 }
 
@@ -61,13 +63,14 @@ export async function loadAppData(): Promise<AppData> {
   const embedded = embeddedAppData();
   if (embedded) return embedded;
 
-  const [catalog, essentials, examFocus, terms, templates, experienceNotes] = await Promise.all([
+  const [catalog, essentials, examFocus, terms, templates, experienceNotes, jingNotes] = await Promise.all([
     fetchJson<MaterialCatalogItem[]>("catalog.json"),
     fetchJson<EssentialsData>("essentials.json"),
     fetchJson<ExamFocusData>("exam-focus.json"),
     fetchJson<TermDefinition[]>("terms.json"),
     fetchJson<AnswerTemplate[]>("templates.json"),
     fetchJson<ExperienceNotesData>("experience-notes.json"),
+    fetchJson<CuratedExperienceNotesData>("jing-notes.json"),
   ]);
   const materials = await Promise.all(catalog.map(async (item) => {
     const markdown = await fetchText(item.path);
@@ -82,6 +85,7 @@ export async function loadAppData(): Promise<AppData> {
     terms,
     templates,
     experienceNotes,
+    jingNotes,
     experienceImage: contentUrl("assets/meng-key-points.jpg"),
   };
 }
